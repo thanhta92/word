@@ -1,0 +1,1490 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>CloudDocs - Microsoft OneDrive & Word Online</title>
+  <!-- Google Fonts for rich typography -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Aptos:ital,wght@0,400;0,700;1,400;1,700&family=Calibri:ital,wght@0,400;0,700;1,400;1,700&family=Inter:wght@300;400;500;600;700&family=Merriweather:ital,wght@0,400;0,700;1,400&family=Montserrat:wght@400;600;700&family=Open+Sans:ital,wght@0,400;0,600;1,400&family=Playfair+Display:ital,wght@0,600;1,400&family=Roboto+Mono:wght@400;500&family=Roboto:ital,wght@0,400;0,500;0,700;1,400&family=Segoe+UI:ital,wght@0,400;0,600;0,700;1,400&family=Times+New+Roman&family=Ubuntu:wght@400;500;700&display=swap" rel="stylesheet">
+  <!-- FontAwesome Icons for tools -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/explorer.css">
+
+  <!-- PWA & Mobile Web App Meta Tags -->
+  <link rel="manifest" href="manifest.json">
+  <meta name="theme-color" content="#185abd">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="default">
+  <meta name="apple-mobile-web-app-title" content="CloudDocs">
+  <link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="icons/apple-touch-icon.png">
+  <link rel="icon" type="image/svg+xml" href="icons/icon.svg">
+  <link rel="icon" type="image/png" sizes="192x192" href="icons/icon-192.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="icons/favicon-32.png">
+</head>
+<body class="office-theme">
+
+  <!-- ================= 1. EXPLORER VIEW (ONEDRIVE / FOLDER & FILE MANAGER) ================= -->
+  <div id="view-explorer" class="app-view active">
+    
+    <!-- Top Header -->
+    <header class="explorer-header">
+      <div class="explorer-header-left">
+        <div class="brand-icon-wrapper" id="btn-brand-home" title="Trang chủ CloudDocs">
+          <svg width="28" height="28" viewBox="0 0 24 24" fill="none">
+            <rect width="24" height="24" rx="5" fill="#ffffff"/>
+            <path d="M14.5 4H19C19.55 4 20 4.45 20 5V19C20 19.55 19.55 20 19 20H14.5V4Z" fill="#2B7CD3"/>
+            <path d="M5 4H14.5V20H5C4.45 20 4 19.55 4 19V5C4 4.45 4.45 4 5 4Z" fill="#185ABD"/>
+            <path d="M6 8.5L8.2 15.5H9.8L11.5 10.2L13.2 15.5H14.8L17 8.5H15.2L14 13.5L12.4 8.5H10.6L9 13.5L7.8 8.5H6Z" fill="#185ABD"/>
+          </svg>
+          <div class="brand-title">
+            <span class="brand-name">Microsoft OneDrive</span>
+            <span class="brand-sub">Quản lý Thư mục & Tài liệu Word</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Search Box -->
+      <div class="explorer-header-center">
+        <div class="explorer-search-box">
+          <i class="fa-solid fa-magnifying-glass"></i>
+          <input type="text" id="explorer-search-input" placeholder="Tìm kiếm thư mục hoặc tệp docx..." autocomplete="off">
+          <button class="btn-clear-search" id="btn-clear-search" title="Xóa tìm kiếm"><i class="fa-solid fa-xmark"></i></button>
+        </div>
+      </div>
+
+      <!-- Header Right Controls -->
+      <div class="explorer-header-right">
+        <!-- Realtime Cloud Sync Badge -->
+        <div class="cloud-sync-badge online" id="explorer-sync-badge" title="Bấm để kiểm tra đồng bộ ngay">
+          <span class="sync-dot"></span>
+          <span id="explorer-sync-text">Đồng bộ Trực tuyến (Cloud)</span>
+        </div>
+
+        <!-- Mở trên điện thoại (QR Code Pairing) -->
+        <button class="action-pill-btn" id="btn-link-mobile" title="Mở trên điện thoại bằng mã QR / Liên kết đồng bộ">
+          <i class="fa-solid fa-qrcode"></i> <span>Mã QR ĐT</span>
+        </button>
+
+        <!-- Cài đặt App vào ĐT / Màn hình chính (PWA) -->
+        <button class="action-pill-btn pwa-btn-highlight" id="btn-install-pwa" title="Cài đặt thành App trên Màn hình chính Điện thoại">
+          <i class="fa-solid fa-download"></i> <span>Cài App ĐT</span>
+        </button>
+
+        <!-- Dark mode toggle -->
+        <button class="action-pill-btn" id="btn-toggle-dark-explorer" title="Đổi chế độ Sáng / Tối">
+          <i class="fa-solid fa-moon"></i>
+        </button>
+
+        <!-- User account button -->
+        <div class="user-account-btn" id="user-account-btn" title="Quản lý Tài khoản & Mã đồng bộ">
+          <div class="user-account-avatar" id="user-account-avatar">U</div>
+          <span id="user-account-name">user</span>
+          <i class="fa-solid fa-chevron-down" style="font-size: 10px; opacity: 0.7;"></i>
+        </div>
+      </div>
+    </header>
+
+    <!-- Command Bar -->
+    <div class="explorer-command-bar">
+      <div class="command-bar-left">
+        <!-- Nút Tạo Mới (Dropdown) -->
+        <div style="position: relative;">
+          <button class="btn-command-new" id="btn-command-new">
+            <i class="fa-solid fa-plus"></i>
+            <span>Tạo mới</span>
+            <i class="fa-solid fa-chevron-down" style="font-size: 10px; margin-left: 2px;"></i>
+          </button>
+          <div class="command-new-dropdown" id="command-new-dropdown">
+            <button class="dropdown-action-item" id="btn-new-document">
+              <i class="fa-solid fa-file-word color-word"></i>
+              <div>
+                <strong>Tài liệu Word mới</strong>
+                <div style="font-size: 11px; color: var(--text-secondary);">Tệp định dạng .docx</div>
+              </div>
+            </button>
+            <button class="dropdown-action-item" id="btn-new-folder">
+              <i class="fa-solid fa-folder-plus color-folder"></i>
+              <div>
+                <strong>Thư mục mới</strong>
+                <div style="font-size: 11px; color: var(--text-secondary);">Phân loại tài liệu</div>
+              </div>
+            </button>
+          </div>
+        </div>
+
+        <!-- Nút Tải lên file docx -->
+        <button class="btn-command" id="btn-command-upload" title="Tải tệp .docx từ máy tính hoặc điện thoại lên">
+          <i class="fa-solid fa-arrow-up-from-bracket"></i>
+          <span>Tải lên (.docx)</span>
+        </button>
+        <input type="file" id="input-upload-docx" accept=".docx,.doc,.txt,.html" style="display: none;">
+
+        <div class="command-bar-divider"></div>
+
+        <!-- Nút Refresh Sync -->
+        <button class="btn-command" id="btn-command-sync" onclick="window.cloudDocs.syncFromCloud()" title="Kiểm tra đồng bộ dữ liệu ngay">
+          <i class="fa-solid fa-arrows-rotate"></i>
+          <span>Làm mới</span>
+        </button>
+      </div>
+
+      <div class="command-bar-right">
+        <!-- Chuyển đổi xem Grid / List -->
+        <div class="view-toggle-group">
+          <button class="btn-view-toggle active" id="btn-view-grid" title="Xem dạng Lưới (Grid View)">
+            <i class="fa-solid fa-table-cells-large"></i>
+          </button>
+          <button class="btn-view-toggle" id="btn-view-list" title="Xem dạng Danh sách (List View)">
+            <i class="fa-solid fa-list-ul"></i>
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Breadcrumb & Location Bar -->
+    <div class="explorer-location-bar">
+      <div class="breadcrumb-list" id="breadcrumb-list">
+        <!-- Rendered by JS -->
+      </div>
+      <div class="location-metrics" id="location-metrics">
+        <i class="fa-solid fa-shield-halved text-green"></i> Tự động đồng bộ Realtime
+      </div>
+    </div>
+
+    <!-- Scrollable Main Content -->
+    <div class="explorer-content-scroll">
+      <!-- Folders Section -->
+      <section class="explorer-section" id="folders-section">
+        <div class="section-header">
+          <h3 class="section-title">
+            <i class="fa-solid fa-folder-tree" style="color: #f59e0b;"></i>
+            Thư mục <span class="section-count" id="folders-count"></span>
+          </h3>
+        </div>
+        <div class="folders-grid" id="folders-grid">
+          <!-- Rendered by JS -->
+        </div>
+      </section>
+
+      <!-- Documents Section -->
+      <section class="explorer-section" id="files-section">
+        <div class="section-header">
+          <h3 class="section-title">
+            <i class="fa-solid fa-file-word" style="color: #185abd;"></i>
+            Tài liệu Word (.docx) <span class="section-count" id="files-count"></span>
+          </h3>
+        </div>
+        <!-- Grid View -->
+        <div class="files-grid" id="files-grid">
+          <!-- Rendered by JS -->
+        </div>
+        <!-- List View Container (Hidden initially) -->
+        <div id="files-list-container" style="display: none;"></div>
+      </section>
+
+      <!-- Empty State -->
+      <div class="empty-state" id="explorer-empty-state" style="display: none;">
+        <div class="empty-state-icon">
+          <i class="fa-solid fa-folder-open"></i>
+        </div>
+        <h4 class="empty-state-title">Thư mục này hiện đang trống</h4>
+        <p class="empty-state-desc">Hãy tạo một tài liệu Word mới hoặc tải lên tệp văn bản để bắt đầu soạn thảo và đồng bộ.</p>
+        <button class="btn-command-new" onclick="window.cloudDocs.createDocument()">
+          <i class="fa-solid fa-plus"></i> Tạo tài liệu mới ngay
+        </button>
+      </div>
+    </div>
+
+    <!-- Mobile Floating Action Button (FAB) -->
+    <button class="fab-new-btn" id="fab-new-btn" title="Tạo tài liệu mới">
+      <i class="fa-solid fa-plus"></i>
+    </button>
+  </div>
+
+  <!-- ================= 2. WORD EDITOR VIEW ================= -->
+  <div id="view-editor" class="app-view">
+
+    <!-- TOP TITLE BAR -->
+    <header class="office-titlebar">
+      <div class="titlebar-left">
+        <!-- Back to Explorer Button -->
+        <button id="btn-back-to-drive" class="btn-back-nav" title="Quay về Quản lý Thư mục">
+          <i class="fa-solid fa-arrow-left"></i> <span>Tất cả tệp</span>
+        </button>
+
+        <div class="app-w-icon" title="Word Online">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+            <rect width="24" height="24" rx="4" fill="#185ABD"/>
+            <path d="M14.5 4H19C19.55 4 20 4.45 20 5V19C20 19.55 19.55 20 19 20H14.5V4Z" fill="#2B7CD3"/>
+            <path d="M5 4H14.5V20H5C4.45 20 4 19.55 4 19V5C4 4.45 4.45 4 5 4Z" fill="#185ABD"/>
+            <path d="M6 8.5L8.2 15.5H9.8L11.5 10.2L13.2 15.5H14.8L17 8.5H15.2L14 13.5L12.4 8.5H10.6L9 13.5L7.8 8.5H6Z" fill="white"/>
+          </svg>
+        </div>
+        <!-- Quick Access Toolbar -->
+        <div class="quick-toolbar">
+          <button id="qa-autosave-btn" class="qa-toggle active" title="Tự động lưu: Bật">
+            <span class="toggle-slider"></span>
+            <span class="qa-label">AutoSave</span>
+          </button>
+          <button id="qa-save" class="qa-btn" title="Lưu tài liệu (Ctrl+S)"><i class="fa-solid fa-floppy-disk"></i></button>
+          <button id="qa-undo" class="qa-btn" title="Hoàn tác (Ctrl+Z)"><i class="fa-solid fa-arrow-rotate-left"></i></button>
+          <button id="qa-redo" class="qa-btn" title="Làm lại (Ctrl+Y)"><i class="fa-solid fa-arrow-rotate-right"></i></button>
+          <button id="qa-print" class="qa-btn" title="In tài liệu (Ctrl+P)"><i class="fa-solid fa-print"></i></button>
+        </div>
+
+        <!-- Document Name Title -->
+        <div class="doc-title-container">
+          <input type="text" id="doc-title-input" value="Tài liệu 1.docx" spellcheck="false" title="Nhấn để đổi tên">
+          <span class="doc-save-status" id="save-status"><i class="fa-solid fa-cloud-check"></i> Đã lưu vào máy</span>
+        </div>
+      </div>
+
+      <!-- Search Box in Ribbon -->
+      <div class="titlebar-center">
+        <div class="office-search-box">
+          <i class="fa-solid fa-magnifying-glass"></i>
+          <input type="text" id="quick-search-input" placeholder="Tìm kiếm tính năng hoặc văn bản (Alt+Q)">
+        </div>
+      </div>
+
+      <!-- Right Controls: Profile & Window Controls -->
+      <div class="titlebar-right">
+        <!-- Direct Export DOCX button -->
+        <button id="btn-export-docx-direct" class="action-pill-btn" onclick="window.cloudDocs.downloadDocx(window.cloudDocs.activeDocId)" title="Tải xuống tệp Word (.docx)">
+          <i class="fa-solid fa-file-word"></i> <span>Tải .docx</span>
+        </button>
+        <button id="btn-toggle-dark" class="action-pill-btn" title="Chuyển chế độ Sáng / Tối">
+          <i class="fa-solid fa-moon"></i> <span>Chế độ</span>
+        </button>
+        <button id="btn-share-doc" class="action-pill-btn primary" onclick="window.cloudDocs.showQrSyncModal()" title="Chia sẻ & Đồng bộ Đa thiết bị">
+          <i class="fa-solid fa-mobile-screen"></i> <span>Mở trên ĐT</span>
+        </button>
+        <div class="user-avatar" title="Tài khoản Người Dùng" onclick="window.cloudDocs.showAccountModal()">
+          <span id="editor-user-avatar">T</span>
+        </div>
+      </div>
+    </header>
+
+  <!-- ================= RIBBON TABS BAR ================= -->
+  <nav class="ribbon-tabs-bar">
+    <button class="ribbon-tab file-tab" data-tab="file" id="tab-file">Tệp (File)</button>
+    <button class="ribbon-tab active" data-tab="home" id="tab-home">Home</button>
+    <button class="ribbon-tab" data-tab="insert" id="tab-insert">Insert</button>
+    <button class="ribbon-tab" data-tab="draw" id="tab-draw">Draw</button>
+    <button class="ribbon-tab" data-tab="design" id="tab-design">Design</button>
+    <button class="ribbon-tab" data-tab="layout" id="tab-layout">Layout</button>
+    <button class="ribbon-tab" data-tab="references" id="tab-references">References</button>
+    <button class="ribbon-tab" data-tab="mailings" id="tab-mailings">Mailings</button>
+    <button class="ribbon-tab" data-tab="review" id="tab-review">Review</button>
+    <button class="ribbon-tab" data-tab="view" id="tab-view">View</button>
+    <button class="ribbon-tab" data-tab="help" id="tab-help">Help</button>
+    
+    <div class="ribbon-collapse-toggle" title="Thu gọn Ribbon">
+      <i class="fa-solid fa-chevron-up" id="toggle-ribbon-btn"></i>
+    </div>
+  </nav>
+
+  <!-- ================= RIBBON CONTENT CONTAINER ================= -->
+  <section class="ribbon-panel" id="ribbon-panel">
+
+    <!-- ================= HOME TAB (MAIN FOCUS) ================= -->
+    <div class="ribbon-content active" id="ribbon-home">
+      
+      <!-- 1. CLIPBOARD GROUP -->
+      <div class="ribbon-group" id="group-clipboard">
+        <div class="group-content">
+          <!-- Split Paste Button -->
+          <div class="paste-button-split">
+            <button class="paste-main-btn" id="btn-paste" title="Dán nội dung (Ctrl+V)">
+              <div class="paste-icon-wrapper">
+                <svg width="26" height="26" viewBox="0 0 24 24" fill="none">
+                  <rect x="5" y="5" width="14" height="17" rx="2" fill="#FFE082" stroke="#B26A00" stroke-width="1.2"/>
+                  <rect x="7" y="2" width="10" height="5" rx="1.5" fill="#B0BEC5" stroke="#455A64" stroke-width="1"/>
+                  <rect x="8" y="9" width="8" height="2" rx="0.5" fill="#B26A00"/>
+                  <rect x="8" y="13" width="8" height="2" rx="0.5" fill="#B26A00"/>
+                  <rect x="8" y="17" width="5" height="2" rx="0.5" fill="#B26A00"/>
+                </svg>
+              </div>
+              <span class="paste-text">Paste</span>
+            </button>
+            <button class="paste-arrow-btn" id="btn-paste-menu" title="Tùy chọn Dán">
+              <i class="fa-solid fa-caret-down"></i>
+            </button>
+          </div>
+
+          <!-- Cut, Copy, Format Painter Stack -->
+          <div class="clipboard-small-actions">
+            <button class="small-tool-btn" id="btn-cut" title="Cắt (Ctrl+X)">
+              <i class="fa-solid fa-scissors" style="color: #455a64;"></i>
+              <span>Cut</span>
+            </button>
+            <button class="small-tool-btn" id="btn-copy" title="Sao chép (Ctrl+C)">
+              <i class="fa-regular fa-copy" style="color: #455a64;"></i>
+              <span>Copy</span>
+            </button>
+            <button class="small-tool-btn" id="btn-format-painter" title="Format Painter: Nhấp 1 lần để sao chép định dạng, nhấp đúp để dùng liên tục">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" style="vertical-align: middle;">
+                <path d="M19.5 2.5L16.5 5.5L18.5 7.5L21.5 4.5L19.5 2.5Z" fill="#E65100"/>
+                <path d="M15.5 6.5L9.5 12.5V14.5H11.5L17.5 8.5L15.5 6.5Z" fill="#FF9800"/>
+                <path d="M4 18C4 16.5 6 15 8 15C10 15 11 16.5 11 18C11 19.5 9 21 6 21C4.5 21 4 19.5 4 18Z" fill="#FB8C00"/>
+              </svg>
+              <span>Format Painter</span>
+            </button>
+          </div>
+        </div>
+        <div class="group-footer">
+          <span class="group-title">Clipboard</span>
+          <button class="dialog-launcher" title="Mở Clipboard Task Pane"><i class="fa-solid fa-arrow-up-right-from-square"></i></button>
+        </div>
+      </div>
+
+      <!-- 2. FONT GROUP (MATCHING SCREENSHOT) -->
+      <div class="ribbon-group" id="group-font">
+        <div class="group-content flex-column">
+          <!-- Row 1: Font Family, Size, Grow, Shrink, Change Case, Clear Format -->
+          <div class="font-row top-row">
+            <!-- Font Family Dropdown -->
+            <div class="custom-select-container font-family-select" id="font-family-wrapper">
+              <div class="select-selected" id="current-font-name">
+                <span class="font-display">Aptos (Body)</span>
+                <i class="fa-solid fa-chevron-down"></i>
+              </div>
+              <div class="select-items select-hide font-family-list" id="font-family-dropdown">
+                <div class="dropdown-category">Gần đây</div>
+                <div class="font-item" data-font="Aptos" style="font-family: 'Aptos', sans-serif;">Aptos (Body)</div>
+                <div class="font-item" data-font="Calibri" style="font-family: 'Calibri', sans-serif;">Calibri</div>
+                <div class="font-item" data-font="Segoe UI" style="font-family: 'Segoe UI', sans-serif;">Segoe UI</div>
+                <div class="dropdown-category">Phổ biến</div>
+                <div class="font-item" data-font="Times New Roman" style="font-family: 'Times New Roman', serif;">Times New Roman</div>
+                <div class="font-item" data-font="Arial" style="font-family: Arial, sans-serif;">Arial</div>
+                <div class="font-item" data-font="Roboto" style="font-family: 'Roboto', sans-serif;">Roboto</div>
+                <div class="font-item" data-font="Inter" style="font-family: 'Inter', sans-serif;">Inter</div>
+                <div class="font-item" data-font="Montserrat" style="font-family: 'Montserrat', sans-serif;">Montserrat</div>
+                <div class="font-item" data-font="Georgia" style="font-family: Georgia, serif;">Georgia</div>
+                <div class="font-item" data-font="Playfair Display" style="font-family: 'Playfair Display', serif;">Playfair Display</div>
+                <div class="font-item" data-font="Merriweather" style="font-family: 'Merriweather', serif;">Merriweather</div>
+                <div class="font-item" data-font="Roboto Mono" style="font-family: 'Roboto Mono', monospace;">Roboto Mono</div>
+              </div>
+            </div>
+
+            <!-- Font Size Dropdown -->
+            <div class="custom-select-container font-size-select" id="font-size-wrapper">
+              <input type="text" id="font-size-input" class="size-input" value="11" title="Cỡ chữ">
+              <div class="size-dropdown-btn" id="font-size-arrow"><i class="fa-solid fa-chevron-down"></i></div>
+              <div class="select-items select-hide font-size-list" id="font-size-dropdown">
+                <div class="size-item" data-size="8">8</div>
+                <div class="size-item" data-size="9">9</div>
+                <div class="size-item" data-size="10">10</div>
+                <div class="size-item" data-size="11">11</div>
+                <div class="size-item" data-size="12">12</div>
+                <div class="size-item" data-size="14">14</div>
+                <div class="size-item" data-size="16">16</div>
+                <div class="size-item" data-size="18">18</div>
+                <div class="size-item" data-size="20">20</div>
+                <div class="size-item" data-size="24">24</div>
+                <div class="size-item" data-size="28">28</div>
+                <div class="size-item" data-size="36">36</div>
+                <div class="size-item" data-size="48">48</div>
+                <div class="size-item" data-size="72">72</div>
+              </div>
+            </div>
+
+            <!-- Increase Font Size (A^) -->
+            <button class="ribbon-icon-btn" id="btn-increase-font" title="Tăng cỡ chữ (Ctrl+Shift+>)">
+              <span class="icon-increase-font">A<sup class="size-arrow">▲</sup></span>
+            </button>
+
+            <!-- Decrease Font Size (Av) -->
+            <button class="ribbon-icon-btn" id="btn-decrease-font" title="Giảm cỡ chữ (Ctrl+Shift+<)">
+              <span class="icon-decrease-font">A<sub class="size-arrow">▼</sub></span>
+            </button>
+
+            <!-- Change Case (Aa) -->
+            <div class="dropdown-btn-container">
+              <button class="ribbon-icon-btn dropdown-toggle" id="btn-change-case" title="Đổi kiểu chữ hoa / thường">
+                <span class="font-case-text">Aa</span>
+                <i class="fa-solid fa-caret-down mini-caret"></i>
+              </button>
+              <div class="dropdown-popover case-dropdown" id="case-menu">
+                <div class="menu-item" data-case="sentence">Sentence case. (Chữ đầu câu hoa)</div>
+                <div class="menu-item" data-case="lower">lowercase (chữ thường)</div>
+                <div class="menu-item" data-case="upper">UPPERCASE (CHỮ HOA)</div>
+                <div class="menu-item" data-case="capitalize">Capitalize Each Word (Viết Hoa Từng Từ)</div>
+                <div class="menu-item" data-case="toggle">tOGGLE cASE (đẢO nGƯỢC cHỮ)</div>
+              </div>
+            </div>
+
+            <!-- Clear All Formatting -->
+            <button class="ribbon-icon-btn" id="btn-clear-format" title="Xóa toàn bộ định dạng (Ctrl+Space)">
+              <span class="clear-format-icon">
+                <span class="a-letter">A</span>
+                <i class="fa-solid fa-eraser eraser-pink"></i>
+              </span>
+            </button>
+          </div>
+
+          <!-- Row 2: B, I, U, Strikethrough, Subscript, Superscript, Text Effects, Highlight, Font Color -->
+          <div class="font-row bottom-row">
+            <!-- Bold -->
+            <button class="ribbon-icon-btn bold-btn" id="btn-bold" title="In đậm (Ctrl+B)">
+              <strong>B</strong>
+            </button>
+            <!-- Italic -->
+            <button class="ribbon-icon-btn italic-btn" id="btn-italic" title="In nghiêng (Ctrl+I)">
+              <em>I</em>
+            </button>
+            
+            <!-- Underline with Style Dropdown -->
+            <div class="split-button-container">
+              <button class="ribbon-icon-btn underline-btn" id="btn-underline" title="Gạch chân (Ctrl+U)">
+                <span style="text-decoration: underline; font-weight: bold;">U</span>
+              </button>
+              <button class="dropdown-caret-btn" id="btn-underline-styles" title="Kiểu gạch chân">
+                <i class="fa-solid fa-caret-down"></i>
+              </button>
+              <!-- Underline Popover -->
+              <div class="dropdown-popover underline-popover" id="underline-menu">
+                <div class="u-style-item" data-ustyle="solid"><span class="u-preview solid-preview"></span> Single</div>
+                <div class="u-style-item" data-ustyle="double"><span class="u-preview double-preview"></span> Double</div>
+                <div class="u-style-item" data-ustyle="thick"><span class="u-preview thick-preview"></span> Thick</div>
+                <div class="u-style-item" data-ustyle="dotted"><span class="u-preview dotted-preview"></span> Dotted</div>
+                <div class="u-style-item" data-ustyle="dashed"><span class="u-preview dashed-preview"></span> Dashed</div>
+                <div class="u-style-item" data-ustyle="wavy"><span class="u-preview wavy-preview"></span> Wavy</div>
+                <hr class="menu-divider">
+                <div class="menu-title-small">Màu đường gạch:</div>
+                <div class="u-color-palette">
+                  <span class="u-color-dot" style="background:#000000" data-ucolor="#000000"></span>
+                  <span class="u-color-dot" style="background:#d32f2f" data-ucolor="#d32f2f"></span>
+                  <span class="u-color-dot" style="background:#1976d2" data-ucolor="#1976d2"></span>
+                  <span class="u-color-dot" style="background:#388e3c" data-ucolor="#388e3c"></span>
+                  <span class="u-color-dot" style="background:#f57c00" data-ucolor="#f57c00"></span>
+                  <span class="u-color-dot" style="background:#7b1fa2" data-ucolor="#7b1fa2"></span>
+                </div>
+              </div>
+            </div>
+
+            <!-- Strikethrough -->
+            <button class="ribbon-icon-btn strikethrough-btn" id="btn-strikethrough" title="Gạch ngang chữ">
+              <s>ab</s>
+            </button>
+
+            <!-- Subscript -->
+            <button class="ribbon-icon-btn" id="btn-subscript" title="Chỉ số dưới (Ctrl+=)">
+              <span>x<sub>2</sub></span>
+            </button>
+
+            <!-- Superscript -->
+            <button class="ribbon-icon-btn" id="btn-superscript" title="Chỉ số trên (Ctrl+Shift++)">
+              <span>x<sup>2</sup></span>
+            </button>
+
+            <!-- Text Effects & Typography (A with blue glow outline) -->
+            <div class="split-button-container">
+              <button class="ribbon-icon-btn text-effects-btn" id="btn-text-effects" title="Hiệu ứng chữ và Typography">
+                <span class="a-glow-icon">A</span>
+                <i class="fa-solid fa-caret-down mini-caret"></i>
+              </button>
+              <div class="dropdown-popover text-effects-menu" id="text-effects-menu">
+                <div class="effects-title">Hiệu ứng tạo sẵn</div>
+                <div class="preset-grid">
+                  <button class="preset-btn effect-shadow" data-effect="shadow">A</button>
+                  <button class="preset-btn effect-outline" data-effect="outline">A</button>
+                  <button class="preset-btn effect-glow" data-effect="glow">A</button>
+                  <button class="preset-btn effect-gradient" data-effect="gradient">A</button>
+                  <button class="preset-btn effect-3d" data-effect="3d">A</button>
+                  <button class="preset-btn effect-neon" data-effect="neon">A</button>
+                </div>
+                <hr class="menu-divider">
+                <div class="menu-item" data-effect="clear"><i class="fa-solid fa-ban"></i> Xóa hiệu ứng</div>
+              </div>
+            </div>
+
+            <!-- Text Highlight Color (Highlighter Pen) -->
+            <div class="split-button-container color-split">
+              <button class="ribbon-icon-btn color-main-btn" id="btn-highlight" title="Màu tô sáng văn bản">
+                <div class="marker-icon-box">
+                  <i class="fa-solid fa-highlighter marker-pen"></i>
+                  <div class="color-bar" id="highlight-color-bar" style="background-color: #ffff00;"></div>
+                </div>
+              </button>
+              <button class="dropdown-caret-btn" id="btn-highlight-arrow" title="Chọn màu tô sáng">
+                <i class="fa-solid fa-caret-down"></i>
+              </button>
+              <!-- Highlight Color Palette Dropdown -->
+              <div class="dropdown-popover color-palette-popover" id="highlight-palette-menu">
+                <div class="palette-title">Màu tô sáng văn bản</div>
+                <div class="palette-grid highlight-grid">
+                  <div class="color-cell" style="background-color: #ffff00;" data-hl="#ffff00" title="Vàng"></div>
+                  <div class="color-cell" style="background-color: #00ff00;" data-hl="#00ff00" title="Xanh lá"></div>
+                  <div class="color-cell" style="background-color: #00ffff;" data-hl="#00ffff" title="Lục lam"></div>
+                  <div class="color-cell" style="background-color: #ff00ff;" data-hl="#ff00ff" title="Hồng cánh sen"></div>
+                  <div class="color-cell" style="background-color: #0000ff;" data-hl="#0000ff" title="Xanh lam"></div>
+                  <div class="color-cell" style="background-color: #ff0000;" data-hl="#ff0000" title="Đỏ"></div>
+                  <div class="color-cell" style="background-color: #000080;" data-hl="#000080" title="Xanh sẫm"></div>
+                  <div class="color-cell" style="background-color: #008080;" data-hl="#008080" title="Mòng két"></div>
+                  <div class="color-cell" style="background-color: #008000;" data-hl="#008000" title="Xanh lục đậm"></div>
+                  <div class="color-cell" style="background-color: #800080;" data-hl="#800080" title="Tím"></div>
+                  <div class="color-cell" style="background-color: #800000;" data-hl="#800000" title="Đỏ sẫm"></div>
+                  <div class="color-cell" style="background-color: #808000;" data-hl="#808000" title="Ô liu"></div>
+                  <div class="color-cell" style="background-color: #808080;" data-hl="#808080" title="Xám"></div>
+                  <div class="color-cell" style="background-color: #c0c0c0;" data-hl="#c0c0c0" title="Bạc"></div>
+                  <div class="color-cell" style="background-color: #000000;" data-hl="#000000" title="Đen"></div>
+                </div>
+                <button class="no-color-btn" id="btn-highlight-none">
+                  <i class="fa-solid fa-ban"></i> Không có màu (No Color)
+                </button>
+              </div>
+            </div>
+
+            <!-- Font Color (A with colored bar) -->
+            <div class="split-button-container color-split">
+              <button class="ribbon-icon-btn color-main-btn" id="btn-font-color" title="Màu phông chữ">
+                <div class="font-color-box">
+                  <span class="font-a">A</span>
+                  <div class="color-bar" id="font-color-bar" style="background-color: #d32f2f;"></div>
+                </div>
+              </button>
+              <button class="dropdown-caret-btn" id="btn-font-color-arrow" title="Bảng màu phông chữ">
+                <i class="fa-solid fa-caret-down"></i>
+              </button>
+              <!-- Full Office Theme Colors Popover -->
+              <div class="dropdown-popover full-color-palette" id="font-color-palette-menu">
+                <div class="palette-section-title">Màu tự động</div>
+                <button class="auto-color-btn" data-color="#000000">
+                  <span class="color-preview-box" style="background: #000000;"></span> Tự động (Đen)
+                </button>
+
+                <div class="palette-section-title">Màu chủ đề (Theme Colors)</div>
+                <div class="theme-color-matrix" id="theme-colors-grid">
+                  <!-- Generated by JS: Office palette with tints/shades -->
+                </div>
+
+                <div class="palette-section-title">Màu chuẩn (Standard Colors)</div>
+                <div class="standard-colors-row">
+                  <span class="std-color" style="background:#c00000" data-color="#c00000" title="Đỏ đậm"></span>
+                  <span class="std-color" style="background:#ff0000" data-color="#ff0000" title="Đỏ"></span>
+                  <span class="std-color" style="background:#ffc000" data-color="#ffc000" title="Cam"></span>
+                  <span class="std-color" style="background:#ffff00" data-color="#ffff00" title="Vàng"></span>
+                  <span class="std-color" style="background:#92d050" data-color="#92d050" title="Xanh nhạt"></span>
+                  <span class="std-color" style="background:#00b050" data-color="#00b050" title="Xanh lục"></span>
+                  <span class="std-color" style="background:#00b0f0" data-color="#00b0f0" title="Xanh da trời"></span>
+                  <span class="std-color" style="background:#0070c0" data-color="#0070c0" title="Xanh lam"></span>
+                  <span class="std-color" style="background:#002060" data-color="#002060" title="Xanh tím than"></span>
+                  <span class="std-color" style="background:#7030a0" data-color="#7030a0" title="Tím"></span>
+                </div>
+
+                <div class="more-colors-section">
+                  <label for="custom-font-color-input" class="custom-color-label">
+                    <i class="fa-solid fa-eye-dropper"></i> Màu tùy chỉnh khác...
+                    <input type="color" id="custom-font-color-input" style="display:none;">
+                  </label>
+                </div>
+              </div>
+            </div>
+
+          </div>
+        </div>
+        <div class="group-footer">
+          <span class="group-title">Font</span>
+          <button class="dialog-launcher" title="Hộp thoại Phông chữ (Ctrl+D)"><i class="fa-solid fa-arrow-up-right-from-square"></i></button>
+        </div>
+      </div>
+
+      <!-- 3. PARAGRAPH GROUP (MATCHING SCREENSHOT) -->
+      <div class="ribbon-group" id="group-paragraph">
+        <div class="group-content flex-column">
+          <!-- Row 1: Bullets, Numbering, Multilevel, Decrease Indent, Increase Indent, Sort, Show/Hide ¶ -->
+          <div class="paragraph-row top-row">
+            <!-- Bullets split button -->
+            <div class="split-button-container">
+              <button class="ribbon-icon-btn list-icon-btn" id="btn-bullet-list" title="Danh sách dấu đầu dòng (Bullets)">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none">
+                  <circle cx="5" cy="7" r="2.5" fill="#0078D4"/>
+                  <circle cx="5" cy="12" r="2.5" fill="#0078D4"/>
+                  <circle cx="5" cy="17" r="2.5" fill="#0078D4"/>
+                  <rect x="10" y="6" width="11" height="2" rx="1" fill="#424242"/>
+                  <rect x="10" y="11" width="11" height="2" rx="1" fill="#424242"/>
+                  <rect x="10" y="16" width="11" height="2" rx="1" fill="#424242"/>
+                </svg>
+              </button>
+              <button class="dropdown-caret-btn" id="btn-bullet-arrow" title="Thư viện Dấu đầu dòng">
+                <i class="fa-solid fa-caret-down"></i>
+              </button>
+              <!-- Bullets Dropdown -->
+              <div class="dropdown-popover bullets-library-popover" id="bullets-menu">
+                <div class="palette-title">Thư viện Dấu đầu dòng (Bullet Library)</div>
+                <div class="bullet-grid">
+                  <div class="bullet-choice active" data-bullet="disc" title="Chấm tròn đặc (Mặc định)">●</div>
+                  <div class="bullet-choice" data-bullet="circle" title="Vòng tròn rỗng">○</div>
+                  <div class="bullet-choice" data-bullet="square" title="Hình vuông đặc">■</div>
+                  <div class="bullet-choice" data-bullet="diamond" title="Hình thoi">◆</div>
+                  <div class="bullet-choice" data-bullet="arrow" title="Mũi tên">➢</div>
+                  <div class="bullet-choice" data-bullet="check" title="Dấu tích kiểm">✔</div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Numbered List split button -->
+            <div class="split-button-container">
+              <button class="ribbon-icon-btn list-icon-btn" id="btn-number-list" title="Danh sách đánh số (Numbering)">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none">
+                  <text x="3" y="8" font-size="7" font-weight="bold" fill="#0078D4">1</text>
+                  <text x="3" y="14" font-size="7" font-weight="bold" fill="#0078D4">2</text>
+                  <text x="3" y="20" font-size="7" font-weight="bold" fill="#0078D4">3</text>
+                  <rect x="10" y="6" width="11" height="2" rx="1" fill="#424242"/>
+                  <rect x="10" y="12" width="11" height="2" rx="1" fill="#424242"/>
+                  <rect x="10" y="18" width="11" height="2" rx="1" fill="#424242"/>
+                </svg>
+              </button>
+              <button class="dropdown-caret-btn" id="btn-number-arrow" title="Thư viện Đánh số">
+                <i class="fa-solid fa-caret-down"></i>
+              </button>
+              <!-- Numbering Dropdown -->
+              <div class="dropdown-popover numbering-library-popover" id="numbering-menu">
+                <div class="palette-title">Thư viện Đánh số (Numbering Library)</div>
+                <div class="number-grid">
+                  <div class="num-choice" data-numtype="decimal">1. 2. 3.</div>
+                  <div class="num-choice" data-numtype="decimal-paren">1) 2) 3)</div>
+                  <div class="num-choice" data-numtype="upper-roman">I. II. III.</div>
+                  <div class="num-choice" data-numtype="upper-alpha">A. B. C.</div>
+                  <div class="num-choice" data-numtype="lower-alpha">a) b) c)</div>
+                  <div class="num-choice" data-numtype="lower-roman">i. ii. iii.</div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Multilevel List split button -->
+            <div class="split-button-container">
+              <button class="ribbon-icon-btn list-icon-btn" id="btn-multilevel-list" title="Danh sách nhiều cấp độ (Multilevel List)">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none">
+                  <text x="2" y="7" font-size="6" font-weight="bold" fill="#0078D4">1</text>
+                  <text x="4" y="13" font-size="5" font-weight="bold" fill="#0078D4">a</text>
+                  <text x="6" y="19" font-size="5" font-weight="bold" fill="#0078D4">i</text>
+                  <rect x="9" y="5" width="12" height="1.8" rx="0.9" fill="#424242"/>
+                  <rect x="11" y="11" width="10" height="1.8" rx="0.9" fill="#424242"/>
+                  <rect x="13" y="17" width="8" height="1.8" rx="0.9" fill="#424242"/>
+                </svg>
+              </button>
+              <button class="dropdown-caret-btn" id="btn-multilevel-arrow" title="Thư viện Danh sách nhiều cấp">
+                <i class="fa-solid fa-caret-down"></i>
+              </button>
+              <div class="dropdown-popover multilevel-popover" id="multilevel-menu">
+                <div class="palette-title">Kiểu danh sách nhiều cấp</div>
+                <div class="multi-item" data-multi="std">1 > a > i</div>
+                <div class="multi-item" data-multi="head">1.1 > 1.1.1 > 1.1.1.1</div>
+                <div class="multi-item" data-multi="article">Điều 1 > Mục 1.01</div>
+              </div>
+            </div>
+
+            <div class="group-inner-divider"></div>
+
+            <!-- Decrease Indent -->
+            <button class="ribbon-icon-btn" id="btn-decrease-indent" title="Giảm lề thụt dòng (Shift+Tab)">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none">
+                <path d="M8 8L4 12L8 16V8Z" fill="#0078D4"/>
+                <rect x="11" y="6" width="10" height="2" rx="1" fill="#424242"/>
+                <rect x="11" y="11" width="10" height="2" rx="1" fill="#424242"/>
+                <rect x="11" y="16" width="10" height="2" rx="1" fill="#424242"/>
+              </svg>
+            </button>
+
+            <!-- Increase Indent -->
+            <button class="ribbon-icon-btn" id="btn-increase-indent" title="Tăng lề thụt dòng (Tab)">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none">
+                <path d="M7 8L11 12L7 16V8Z" fill="#0078D4"/>
+                <rect x="4" y="6" width="17" height="2" rx="1" fill="#424242"/>
+                <rect x="13" y="11" width="8" height="2" rx="1" fill="#424242"/>
+                <rect x="4" y="16" width="17" height="2" rx="1" fill="#424242"/>
+              </svg>
+            </button>
+
+            <!-- Sort Paragraphs (A-Z) -->
+            <button class="ribbon-icon-btn" id="btn-sort" title="Sắp xếp danh sách (A-Z / Z-A)">
+              <span class="sort-icon-box">
+                <span class="az-text">A<br>Z</span>
+                <i class="fa-solid fa-arrow-down-long az-arrow"></i>
+              </span>
+            </button>
+
+            <!-- Show/Hide Formatting Marks (Pilcrow ¶) -->
+            <button class="ribbon-icon-btn" id="btn-pilcrow" title="Hiện/Ẩn ký tự định dạng ẩn (Ctrl+*)">
+              <span class="pilcrow-symbol">¶</span>
+            </button>
+          </div>
+
+          <!-- Row 2: Align Left, Center, Align Right, Justify, Line Spacing, Shading, Borders -->
+          <div class="paragraph-row bottom-row">
+            <!-- Align Left -->
+            <button class="ribbon-icon-btn active" id="btn-align-left" title="Căn lề trái (Ctrl+L)">
+              <i class="fa-solid fa-align-left"></i>
+            </button>
+            <!-- Align Center -->
+            <button class="ribbon-icon-btn" id="btn-align-center" title="Căn giữa (Ctrl+E)">
+              <i class="fa-solid fa-align-center"></i>
+            </button>
+            <!-- Align Right -->
+            <button class="ribbon-icon-btn" id="btn-align-right" title="Căn lề phải (Ctrl+R)">
+              <i class="fa-solid fa-align-right"></i>
+            </button>
+            <!-- Justify -->
+            <button class="ribbon-icon-btn" id="btn-align-justify" title="Căn đều 2 bên (Ctrl+J)">
+              <i class="fa-solid fa-align-justify"></i>
+            </button>
+
+            <div class="group-inner-divider"></div>
+
+            <!-- Line and Paragraph Spacing -->
+            <div class="split-button-container">
+              <button class="ribbon-icon-btn" id="btn-line-spacing" title="Khoảng cách dòng và đoạn">
+                <div class="line-spacing-icon">
+                  <i class="fa-solid fa-arrows-up-down spacing-arrows"></i>
+                  <i class="fa-solid fa-bars spacing-bars"></i>
+                </div>
+                <i class="fa-solid fa-caret-down mini-caret"></i>
+              </button>
+              <!-- Line Spacing Dropdown -->
+              <div class="dropdown-popover line-spacing-popover" id="line-spacing-menu">
+                <div class="menu-item spacing-choice" data-spacing="1.0">1.0</div>
+                <div class="menu-item spacing-choice active" data-spacing="1.15"><i class="fa-solid fa-check check-indicator"></i> 1.15</div>
+                <div class="menu-item spacing-choice" data-spacing="1.5">1.5</div>
+                <div class="menu-item spacing-choice" data-spacing="2.0">2.0</div>
+                <div class="menu-item spacing-choice" data-spacing="2.5">2.5</div>
+                <div class="menu-item spacing-choice" data-spacing="3.0">3.0</div>
+                <hr class="menu-divider">
+                <div class="menu-item" id="btn-add-space-before"><i class="fa-solid fa-plus"></i> Thêm khoảng cách trước đoạn</div>
+                <div class="menu-item" id="btn-add-space-after"><i class="fa-solid fa-plus"></i> Thêm khoảng cách sau đoạn</div>
+                <div class="menu-item" id="btn-remove-space-after"><i class="fa-solid fa-minus"></i> Xóa khoảng cách sau đoạn</div>
+              </div>
+            </div>
+
+            <!-- Shading (Bucket) -->
+            <div class="split-button-container color-split">
+              <button class="ribbon-icon-btn color-main-btn" id="btn-shading" title="Tô màu nền đoạn văn (Shading)">
+                <div class="shading-icon-box">
+                  <i class="fa-solid fa-fill-drip shading-bucket"></i>
+                  <div class="color-bar" id="shading-color-bar" style="background-color: #e0e0e0;"></div>
+                </div>
+              </button>
+              <button class="dropdown-caret-btn" id="btn-shading-arrow" title="Bảng màu nền">
+                <i class="fa-solid fa-caret-down"></i>
+              </button>
+              <!-- Shading Palette -->
+              <div class="dropdown-popover shading-palette-popover" id="shading-palette-menu">
+                <div class="palette-title">Màu nền đoạn văn (Shading)</div>
+                <div class="theme-color-matrix" id="shading-colors-grid"></div>
+                <button class="no-color-btn" id="btn-shading-none">
+                  <i class="fa-solid fa-ban"></i> Không có màu nền
+                </button>
+              </div>
+            </div>
+
+            <!-- Borders -->
+            <div class="split-button-container">
+              <button class="ribbon-icon-btn" id="btn-borders" title="Đường viền đoạn văn / bảng (Borders)">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none">
+                  <rect x="3" y="3" width="18" height="18" stroke="#424242" stroke-width="1.5" fill="none"/>
+                  <line x1="12" y1="3" x2="12" y2="21" stroke="#424242" stroke-width="1.5" stroke-dasharray="2 2"/>
+                  <line x1="3" y1="12" x2="21" y2="12" stroke="#424242" stroke-width="1.5" stroke-dasharray="2 2"/>
+                </svg>
+                <i class="fa-solid fa-caret-down mini-caret"></i>
+              </button>
+              <!-- Borders Dropdown -->
+              <div class="dropdown-popover borders-popover" id="borders-menu">
+                <div class="menu-item" data-border="bottom"><i class="fa-solid fa-border-top"></i> Viền dưới (Bottom Border)</div>
+                <div class="menu-item" data-border="top"><i class="fa-solid fa-border-top"></i> Viền trên (Top Border)</div>
+                <div class="menu-item" data-border="left"><i class="fa-solid fa-border-all"></i> Viền trái (Left Border)</div>
+                <div class="menu-item" data-border="right"><i class="fa-solid fa-border-all"></i> Viền phải (Right Border)</div>
+                <hr class="menu-divider">
+                <div class="menu-item" data-border="none"><i class="fa-solid fa-border-none"></i> Không viền (No Border)</div>
+                <div class="menu-item" data-border="all"><i class="fa-solid fa-border-all"></i> Tất cả viền (All Borders)</div>
+                <div class="menu-item" data-border="outside"><i class="fa-regular fa-square"></i> Viền ngoài (Outside Borders)</div>
+                <div class="menu-item" data-border="box-callout"><i class="fa-solid fa-quote-left"></i> Khung ghi chú (Callout Box)</div>
+                <hr class="menu-divider">
+                <div class="menu-item" data-border="hline"><i class="fa-solid fa-minus"></i> Thêm đường kẻ ngang (Horizontal Line)</div>
+              </div>
+            </div>
+
+          </div>
+        </div>
+        <div class="group-footer">
+          <span class="group-title">Paragraph</span>
+          <button class="dialog-launcher" title="Hộp thoại Đoạn văn"><i class="fa-solid fa-arrow-up-right-from-square"></i></button>
+        </div>
+      </div>
+
+      <!-- 4. STYLES GROUP (BONUS WORD FEATURE) -->
+      <div class="ribbon-group" id="group-styles">
+        <div class="styles-container">
+          <div class="styles-gallery" id="styles-gallery">
+            <button class="style-card active" data-style="normal">
+              <span class="style-preview" style="font-size: 11px;">AaBbCcDc</span>
+              <span class="style-name">Normal</span>
+            </button>
+            <button class="style-card" data-style="no-spacing">
+              <span class="style-preview" style="font-size: 11px;">AaBbCcDc</span>
+              <span class="style-name">No Spacing</span>
+            </button>
+            <button class="style-card" data-style="heading-1">
+              <span class="style-preview" style="font-size: 15px; font-weight: bold; color: #2B579A;">AaBbCc</span>
+              <span class="style-name">Heading 1</span>
+            </button>
+            <button class="style-card" data-style="heading-2">
+              <span class="style-preview" style="font-size: 13px; font-weight: bold; color: #2B579A;">AaBbCc</span>
+              <span class="style-name">Heading 2</span>
+            </button>
+            <button class="style-card" data-style="title">
+              <span class="style-preview" style="font-size: 18px; font-weight: bold;">Title</span>
+              <span class="style-name">Title</span>
+            </button>
+            <button class="style-card" data-style="subtitle">
+              <span class="style-preview" style="font-size: 12px; color: #555; font-style: italic;">Subtitle</span>
+              <span class="style-name">Subtitle</span>
+            </button>
+            <button class="style-card" data-style="quote">
+              <span class="style-preview" style="font-size: 11px; font-style: italic; color: #2B579A;">"Quote"</span>
+              <span class="style-name">Quote</span>
+            </button>
+          </div>
+        </div>
+        <div class="group-footer">
+          <span class="group-title">Styles</span>
+          <button class="dialog-launcher" title="Bảng điều khiển Styles"><i class="fa-solid fa-arrow-up-right-from-square"></i></button>
+        </div>
+      </div>
+
+      <!-- 5. EDITING GROUP -->
+      <div class="ribbon-group" id="group-editing">
+        <div class="group-content flex-column">
+          <button class="small-tool-btn" id="btn-find" title="Tìm kiếm (Ctrl+F)">
+            <i class="fa-solid fa-magnifying-glass text-blue"></i> <span>Find</span>
+          </button>
+          <button class="small-tool-btn" id="btn-replace" title="Thay thế (Ctrl+H)">
+            <i class="fa-solid fa-arrow-right-arrow-left text-blue"></i> <span>Replace</span>
+          </button>
+          <button class="small-tool-btn" id="btn-select-all" title="Chọn tất cả (Ctrl+A)">
+            <i class="fa-regular fa-object-ungroup text-blue"></i> <span>Select All</span>
+          </button>
+        </div>
+        <div class="group-footer">
+          <span class="group-title">Editing</span>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- ================= INSERT TAB ================= -->
+    <div class="ribbon-content" id="ribbon-insert">
+      <div class="ribbon-group">
+        <div class="group-content">
+          <button class="large-tool-btn" id="btn-insert-table">
+            <i class="fa-solid fa-table"></i>
+            <span>Bảng (Table)</span>
+          </button>
+          <button class="large-tool-btn" id="btn-insert-image">
+            <i class="fa-regular fa-image"></i>
+            <span>Hình ảnh</span>
+          </button>
+          <button class="large-tool-btn" id="btn-insert-link">
+            <i class="fa-solid fa-link"></i>
+            <span>Liên kết (Link)</span>
+          </button>
+          <button class="large-tool-btn" id="btn-insert-page-break">
+            <i class="fa-solid fa-file-invoice"></i>
+            <span>Ngắt trang</span>
+          </button>
+        </div>
+        <div class="group-footer"><span class="group-title">Insert Items</span></div>
+      </div>
+    </div>
+
+    <!-- ================= LAYOUT TAB ================= -->
+    <div class="ribbon-content" id="ribbon-layout">
+      <div class="ribbon-group">
+        <div class="group-content">
+          <button class="large-tool-btn" id="btn-layout-margins">
+            <i class="fa-solid fa-arrows-to-dot"></i>
+            <span>Căn lề (Margins)</span>
+          </button>
+          <button class="large-tool-btn" id="btn-layout-orientation">
+            <i class="fa-regular fa-file"></i>
+            <span>Hướng giấy</span>
+          </button>
+          <button class="large-tool-btn" id="btn-layout-size">
+            <i class="fa-solid fa-pager"></i>
+            <span>Khổ giấy A4</span>
+          </button>
+        </div>
+        <div class="group-footer"><span class="group-title">Page Setup</span></div>
+      </div>
+    </div>
+
+    <!-- ================= VIEW TAB ================= -->
+    <div class="ribbon-content" id="ribbon-view">
+      <div class="ribbon-group">
+        <div class="group-content">
+          <button class="large-tool-btn active" id="btn-view-ruler">
+            <i class="fa-solid fa-ruler-combined"></i>
+            <span>Thước kẻ (Ruler)</span>
+          </button>
+          <button class="large-tool-btn" id="btn-view-gridlines">
+            <i class="fa-solid fa-border-none"></i>
+            <span>Lưới trang</span>
+          </button>
+          <button class="large-tool-btn" id="btn-view-fullscreen">
+            <i class="fa-solid fa-expand"></i>
+            <span>Toàn màn hình</span>
+          </button>
+        </div>
+        <div class="group-footer"><span class="group-title">Show/Hide</span></div>
+      </div>
+    </div>
+
+    <!-- Other tabs placeholders -->
+    <div class="ribbon-content" id="ribbon-file">
+      <div class="file-menu-overlay">
+        <div class="file-sidebar">
+          <button class="file-back-btn" id="btn-file-back"><i class="fa-solid fa-arrow-left"></i> Quay lại</button>
+          <button class="file-nav-btn active" data-filetab="new"><i class="fa-solid fa-file"></i> Mới (New)</button>
+          <button class="file-nav-btn" data-filetab="save"><i class="fa-solid fa-floppy-disk"></i> Lưu (Save)</button>
+          <button class="file-nav-btn" data-filetab="export"><i class="fa-solid fa-file-export"></i> Xuất tài liệu (Export)</button>
+          <button class="file-nav-btn" data-filetab="print"><i class="fa-solid fa-print"></i> In ấn (Print)</button>
+        </div>
+        <div class="file-body">
+          <h2>Tùy chọn Tệp & Xuất bản</h2>
+          <div class="export-cards-grid">
+            <div class="export-card" id="export-docx">
+              <i class="fa-solid fa-file-word icon-word"></i>
+              <h3>Tải về định dạng Word (.html/doc)</h3>
+              <p>Mở được chuẩn chỉnh trong Microsoft Word và LibreOffice.</p>
+            </div>
+            <div class="export-card" id="export-pdf">
+              <i class="fa-solid fa-file-pdf icon-pdf"></i>
+              <h3>In hoặc Xuất sang PDF</h3>
+              <p>Bố cục trang chuẩn A4 để nộp báo cáo, đồ án hoặc in tài liệu.</p>
+            </div>
+            <div class="export-card" id="export-txt">
+              <i class="fa-solid fa-file-lines icon-txt"></i>
+              <h3>Xuất dạng Văn bản Thuần (.txt)</h3>
+              <p>Lưu nội dung văn bản đơn giản không chứa định dạng.</p>
+            </div>
+            <div class="export-card" id="export-sample">
+              <i class="fa-solid fa-wand-magic-sparkles icon-sample"></i>
+              <h3>Tải Văn Bản Mẫu Chuẩn</h3>
+              <p>Chèn bài báo cáo mẫu đầy đủ định dạng để thử nghiệm.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </section>
+
+  <!-- ================= WORKSPACE & RULER & DOCUMENT CANVAS ================= -->
+  <main class="word-workspace" id="word-workspace">
+    
+    <!-- Top Horizontal Ruler -->
+    <div class="ruler-horizontal-container" id="ruler-h-container">
+      <div class="ruler-corner"></div>
+      <div class="ruler-h" id="ruler-horizontal">
+        <!-- Draggable Indent Markers -->
+        <div class="indent-marker marker-first-line" id="marker-first-line" title="Thụt dòng đầu tiên (First Line Indent)">
+          <div class="marker-triangle-down"></div>
+        </div>
+        <div class="indent-marker marker-hanging" id="marker-hanging" title="Thụt dòng treo (Hanging Indent)">
+          <div class="marker-triangle-up"></div>
+        </div>
+        <div class="indent-marker marker-left-indent" id="marker-left-indent" title="Lề trái (Left Indent)">
+          <div class="marker-rect"></div>
+        </div>
+        <div class="indent-marker marker-right-indent" id="marker-right-indent" title="Lề phải (Right Indent)">
+          <div class="marker-triangle-up"></div>
+        </div>
+        <!-- Ruler Scale Marks generated via CSS/JS -->
+        <div class="ruler-scale" id="ruler-scale-marks"></div>
+      </div>
+    </div>
+
+    <!-- Main Scrollable Canvas Area -->
+    <div class="document-scroll-viewport" id="doc-viewport">
+      
+      <!-- Vertical Ruler -->
+      <div class="ruler-v" id="ruler-vertical">
+        <div class="ruler-v-scale" id="ruler-v-scale"></div>
+      </div>
+
+      <!-- Page Canvas Wrapper (Supports Multi-Page layout) -->
+      <div class="pages-container" id="pages-container">
+        
+        <!-- Standard A4 Page -->
+        <article class="word-page a4-page" id="page-1" tabindex="0">
+          
+          <!-- Header Area -->
+          <header class="page-header" contenteditable="true" spellcheck="false" data-placeholder="Nhấp đúp để chỉnh sửa Header...">
+            <div class="header-content">Báo Cáo Văn Bản - Microsoft Word Online</div>
+          </header>
+
+          <!-- Main Editable Document Body -->
+          <div class="page-body editable-content" id="document-content" contenteditable="true" spellcheck="false">
+            <h1 style="color: #185ABD; font-size: 24pt; font-family: 'Aptos', sans-serif; margin-bottom: 8px;">CỘNG HÒA XÃ HỘI CHỦ NGHĨA VIỆT NAM</h1>
+            <h3 style="text-align: center; font-size: 14pt; margin-top: 0; color: #333;">Độc lập - Tự do - Hạnh phúc</h3>
+            <div style="text-align: center; margin-bottom: 24px;">---------------o0o---------------</div>
+
+            <h2 style="font-size: 18pt; color: #2B579A; margin-top: 20px;">BÁO CÁO THỬ NGHIỆM TÍNH NĂNG MICROSOFT WORD</h2>
+            
+            <p>Đây là ứng dụng soạn thảo văn bản mô phỏng giao diện <strong>Microsoft Word Ribbon</strong> với đầy đủ các thanh công cụ định dạng trực quan:</p>
+            
+            <p><strong>1. Nhóm Clipboard & Thao tác nhanh:</strong></p>
+            <ul>
+              <li><strong>Format Painter:</strong> Nhấp vào chổi để sao chép toàn bộ định dạng và quét lên đoạn văn khác.</li>
+              <li>Cắt (Cut), Sao chép (Copy), Dán (Paste) với đầy đủ phím tắt <code>Ctrl+C</code>, <code>Ctrl+V</code>, <code>Ctrl+X</code>.</li>
+            </ul>
+
+            <p><strong>2. Nhóm Phông chữ (Font Formatting):</strong></p>
+            <p>Bạn có thể thử nghiệm đổi phông chữ <span style="font-family: 'Times New Roman';">Times New Roman</span>, <span style="font-family: 'Calibri';">Calibri</span>, <span style="font-family: 'Aptos';">Aptos</span>; tăng giảm cỡ chữ <span style="font-size: 16pt; color: #d32f2f;">tại đây</span>; áp dụng <b>In đậm (Bold)</b>, <i>In nghiêng (Italic)</i>, <u>Gạch chân (Underline)</u>, <s>Gạch ngang chữ</s>, công thức hóa học H<sub>2</sub>SO<sub>4</sub> và toán học E = mc<sup>2</sup>.</p>
+            
+            <p>Tô màu đánh dấu văn bản bằng <mark style="background-color: #ffff00;">bút dạ quang (Highlighter)</mark> hoặc <span style="color: #0070c0; font-weight: bold;">chọn màu chữ bất kỳ</span> từ bảng màu Microsoft Office sắc nét.</p>
+
+            <p><strong>3. Nhóm Đoạn văn (Paragraph Formatting):</strong></p>
+            <ol>
+              <li>Căn chỉnh lề trái (Ctrl+L), căn giữa (Ctrl+E), căn phải (Ctrl+R) và căn đều 2 bên (Ctrl+J).</li>
+              <li>Tùy chỉnh khoảng cách dòng 1.0, 1.15, 1.5, 2.0 hoặc thêm khoảng cách trước/sau đoạn văn.</li>
+              <li>Đánh dấu đầu dòng với 6 kiểu bullet chuyên nghiệp và danh sách số đa cấp độ.</li>
+              <li>Tô màu nền đoạn văn bản (Shading) và tạo đường viền hộp (Callout box).</li>
+            </ol>
+
+            <div style="background-color: #f0f4f9; border-left: 4px solid #185abd; padding: 12px 16px; margin: 16px 0; border-radius: 4px;">
+              <strong>Mẹo sử dụng:</strong> Hãy bôi đen bất kỳ đoạn văn bản nào rồi nhấn thử các nút trên thanh Ribbon để trải nghiệm cảm giác thao tác mượt mà như trên phần mềm Word thật!
+            </div>
+          </div>
+
+          <!-- Footer Area -->
+          <footer class="page-footer" contenteditable="true" spellcheck="false" data-placeholder="Nhấp đúp để chỉnh sửa Footer...">
+            <div class="footer-content">
+              <span>Trang <span class="page-number-current">1</span></span>
+              <span>Bảo mật nội bộ</span>
+            </div>
+          </footer>
+
+        </article>
+
+      </div>
+    </div>
+  </main>
+
+  <!-- ================= STATUS BAR (BOTTOM) ================= -->
+  <footer class="office-statusbar">
+    <div class="status-left">
+      <span class="status-item" id="status-pages"><i class="fa-regular fa-file-lines"></i> Trang 1 / 1</span>
+      <span class="status-item" id="status-words"><i class="fa-solid fa-pen-nib"></i> <span id="word-count-num">185</span> từ</span>
+      <span class="status-item" id="status-chars"><span id="char-count-num">1,240</span> ký tự</span>
+      <span class="status-item" id="status-spelling"><i class="fa-solid fa-book-bookmark text-green"></i> Tiếng Việt</span>
+    </div>
+
+    <div class="status-right">
+      <div class="view-mode-buttons">
+        <button class="status-btn" id="btn-view-reading" title="Chế độ đọc (Focus Mode)"><i class="fa-solid fa-book-open"></i></button>
+        <button class="status-btn active" id="btn-view-print" title="Bố trí in (Print Layout)"><i class="fa-regular fa-newspaper"></i></button>
+        <button class="status-btn" id="btn-view-web" title="Bố cục web"><i class="fa-solid fa-globe"></i></button>
+      </div>
+
+      <!-- Zoom Slider -->
+      <div class="zoom-controls">
+        <button class="zoom-btn" id="btn-zoom-out" title="Thu nhỏ"><i class="fa-solid fa-minus"></i></button>
+        <input type="range" id="zoom-slider" min="50" max="200" value="100" step="5" title="Mức thu phóng">
+        <button class="zoom-btn" id="btn-zoom-in" title="Phóng to"><i class="fa-solid fa-plus"></i></button>
+        <button class="zoom-label" id="btn-zoom-reset" title="Đặt lại 100%"><span id="zoom-percentage">100%</span></button>
+      </div>
+    </div>
+  </footer>
+  </div><!-- End of #view-editor -->
+
+  <!-- ================= DIALOGS & MODALS ================= -->
+  <!-- Find & Replace Dialog -->
+  <div class="office-dialog-backdrop" id="find-replace-dialog">
+    <div class="office-dialog">
+      <div class="dialog-header">
+        <span class="dialog-title"><i class="fa-solid fa-magnifying-glass"></i> Tìm kiếm & Thay thế (Find & Replace)</span>
+        <button class="dialog-close-btn" id="btn-close-find"><i class="fa-solid fa-xmark"></i></button>
+      </div>
+      <div class="dialog-body">
+        <div class="dialog-tabs">
+          <button class="dialog-tab active" id="dtab-find">Tìm kiếm</button>
+          <button class="dialog-tab" id="dtab-replace">Thay thế</button>
+        </div>
+        <div class="dialog-form-row">
+          <label for="find-input-text">Tìm nội dung:</label>
+          <input type="text" id="find-input-text" placeholder="Nhập từ cần tìm...">
+        </div>
+        <div class="dialog-form-row" id="replace-field-row">
+          <label for="replace-input-text">Thay thế bằng:</label>
+          <input type="text" id="replace-input-text" placeholder="Nhập từ thay thế...">
+        </div>
+        <div class="dialog-options">
+          <label><input type="checkbox" id="match-case-chk"> Phân biệt hoa / thường</label>
+        </div>
+      </div>
+      <div class="dialog-footer">
+        <button class="office-btn" id="btn-exec-find-next">Tìm tiếp theo</button>
+        <button class="office-btn" id="btn-exec-replace">Thay thế</button>
+        <button class="office-btn primary" id="btn-exec-replace-all">Thay thế tất cả</button>
+        <button class="office-btn" id="btn-cancel-dialog">Hủy</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Insert Image Dialog -->
+  <div class="office-dialog-backdrop" id="image-dialog">
+    <div class="office-dialog">
+      <div class="dialog-header">
+        <span class="dialog-title"><i class="fa-regular fa-image"></i> Chèn hình ảnh vào tài liệu</span>
+        <button class="dialog-close-btn" id="btn-close-img-dialog"><i class="fa-solid fa-xmark"></i></button>
+      </div>
+      <div class="dialog-body">
+        <div class="dialog-form-row">
+          <label>Tải ảnh từ máy tính:</label>
+          <input type="file" id="image-file-input" accept="image/*">
+        </div>
+        <div class="dialog-form-row">
+          <label>Hoặc dán URL ảnh từ Internet:</label>
+          <input type="url" id="image-url-input" placeholder="https://images.unsplash.com/...">
+        </div>
+      </div>
+      <div class="dialog-footer">
+        <button class="office-btn primary" id="btn-confirm-insert-img">Chèn ảnh</button>
+        <button class="office-btn" id="btn-cancel-img-dialog">Hủy</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Insert Table Dialog -->
+  <div class="office-dialog-backdrop" id="table-dialog">
+    <div class="office-dialog">
+      <div class="dialog-header">
+        <span class="dialog-title"><i class="fa-solid fa-table"></i> Tạo bảng (Insert Table)</span>
+        <button class="dialog-close-btn" id="btn-close-tbl-dialog"><i class="fa-solid fa-xmark"></i></button>
+      </div>
+      <div class="dialog-body">
+        <div class="dialog-form-row">
+          <label for="table-rows">Số hàng (Rows):</label>
+          <input type="number" id="table-rows" value="3" min="1" max="20">
+        </div>
+        <div class="dialog-form-row">
+          <label for="table-cols">Số cột (Columns):</label>
+          <input type="number" id="table-cols" value="4" min="1" max="10">
+        </div>
+      </div>
+      <div class="dialog-footer">
+        <button class="office-btn primary" id="btn-confirm-insert-tbl">Tạo bảng</button>
+        <button class="office-btn" id="btn-cancel-tbl-dialog">Hủy</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ================= CLOUDDOCS MODALS & CONTEXT MENU ================= -->
+  <!-- Context Menu for Folders & Documents -->
+  <div class="explorer-context-menu" id="explorer-context-menu">
+    <!-- Populated by JS -->
+  </div>
+
+  <!-- Modal 1: Tạo Thư Mục Mới -->
+  <div class="modal-backdrop-custom" id="modal-new-folder">
+    <div class="modal-card-custom">
+      <div class="modal-header-custom">
+        <div class="modal-title-custom">
+          <i class="fa-solid fa-folder-plus text-blue"></i>
+          <span>Tạo Thư Mục Mới</span>
+        </div>
+        <button class="modal-close-btn"><i class="fa-solid fa-xmark"></i></button>
+      </div>
+      <div class="modal-body-custom">
+        <div class="modal-form-group">
+          <label class="modal-form-label" for="input-new-folder-name">Tên thư mục:</label>
+          <input type="text" class="modal-input" id="input-new-folder-name" placeholder="Ví dụ: Báo cáo tháng, Hợp đồng, Dự án..." autocomplete="off">
+        </div>
+        <div class="modal-form-group">
+          <label class="modal-form-label">Chọn màu sắc biểu tượng:</label>
+          <div class="folder-color-options">
+            <button type="button" class="color-option-btn selected" data-color="#185abd" style="background-color: #185abd;" title="Xanh dương"></button>
+            <button type="button" class="color-option-btn" data-color="#107c41" style="background-color: #107c41;" title="Xanh lá"></button>
+            <button type="button" class="color-option-btn" data-color="#f59e0b" style="background-color: #f59e0b;" title="Vàng cam"></button>
+            <button type="button" class="color-option-btn" data-color="#80397b" style="background-color: #80397b;" title="Tím"></button>
+            <button type="button" class="color-option-btn" data-color="#d13438" style="background-color: #d13438;" title="Đỏ"></button>
+            <button type="button" class="color-option-btn" data-color="#008272" style="background-color: #008272;" title="Xanh cổ vịt"></button>
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer-custom">
+        <button class="office-btn btn-cancel-modal">Hủy</button>
+        <button class="office-btn primary" id="btn-confirm-new-folder">Tạo thư mục</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal 2: Đổi Tên Tệp / Thư Mục -->
+  <div class="modal-backdrop-custom" id="modal-rename">
+    <div class="modal-card-custom">
+      <div class="modal-header-custom">
+        <div class="modal-title-custom">
+          <i class="fa-solid fa-pen-to-square text-blue"></i>
+          <span id="modal-rename-title">Đổi Tên</span>
+        </div>
+        <button class="modal-close-btn"><i class="fa-solid fa-xmark"></i></button>
+      </div>
+      <div class="modal-body-custom">
+        <div class="modal-form-group">
+          <label class="modal-form-label" for="input-rename-value">Tên mới:</label>
+          <input type="text" class="modal-input" id="input-rename-value" autocomplete="off">
+        </div>
+      </div>
+      <div class="modal-footer-custom">
+        <button class="office-btn btn-cancel-modal">Hủy</button>
+        <button class="office-btn primary" id="btn-confirm-rename">Lưu thay đổi</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal 3: Di Chuyển Tệp Vào Thư Mục -->
+  <div class="modal-backdrop-custom" id="modal-move">
+    <div class="modal-card-custom">
+      <div class="modal-header-custom">
+        <div class="modal-title-custom">
+          <i class="fa-solid fa-arrow-right-to-bracket text-blue"></i>
+          <span>Di Chuyển Tệp Vào Thư Mục</span>
+        </div>
+        <button class="modal-close-btn"><i class="fa-solid fa-xmark"></i></button>
+      </div>
+      <div class="modal-body-custom">
+        <div class="modal-form-group">
+          <label class="modal-form-label" for="select-move-destination">Chọn thư mục đích:</label>
+          <select class="modal-input" id="select-move-destination">
+            <!-- Populated by JS -->
+          </select>
+        </div>
+      </div>
+      <div class="modal-footer-custom">
+        <button class="office-btn btn-cancel-modal">Hủy</button>
+        <button class="office-btn primary" id="btn-confirm-move">Di chuyển</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal 4: Quản Lý Tài Khoản & Đồng Bộ Realtime -->
+  <div class="modal-backdrop-custom" id="modal-account">
+    <div class="modal-card-custom">
+      <div class="modal-header-custom">
+        <div class="modal-title-custom">
+          <i class="fa-solid fa-user-gear text-blue"></i>
+          <span>Tài Khoản & Đồng Bộ Đa Thiết Bị</span>
+        </div>
+        <button class="modal-close-btn"><i class="fa-solid fa-xmark"></i></button>
+      </div>
+      <div class="modal-body-custom">
+        <div class="modal-form-group">
+          <label class="modal-form-label" for="input-sync-account-name">Mã Tài khoản Đồng Bộ (Sync ID):</label>
+          <input type="text" class="modal-input" id="input-sync-account-name" placeholder="Ví dụ: thanhta, myoffice2026..." autocomplete="off">
+          <div class="modal-hint">
+            Nhập cùng một mã tài khoản này trên <strong>Điện thoại</strong> hoặc <strong>Laptop khác</strong> để toàn bộ thư mục và tệp văn bản tự động đồng bộ thời gian thực!
+          </div>
+        </div>
+        <div style="background-color: #f0f4f9; padding: 12px; border-radius: 6px; font-size: 12px; line-height: 1.5; color: #103f82;">
+          <i class="fa-solid fa-circle-check text-green"></i> <strong>Đồng bộ hai chiều tức thì:</strong> Bất kỳ lúc nào bạn gõ thêm nội dung từ điện thoại hay laptop, máy tính còn lại sẽ nhận cập nhật ngay lập tức mà không cần bấm phím F5!
+        </div>
+      </div>
+      <div class="modal-footer-custom">
+        <button class="office-btn btn-cancel-modal">Hủy</button>
+        <button class="office-btn primary" id="btn-switch-account">Áp Dụng & Đồng Bộ Ngay</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal 5: Mở Trên Điện Thoại (QR Code & Quick Link) -->
+  <div class="modal-backdrop-custom" id="modal-qr-sync">
+    <div class="modal-card-custom">
+      <div class="modal-header-custom">
+        <div class="modal-title-custom">
+          <i class="fa-solid fa-mobile-screen-button text-blue"></i>
+          <span>Đồng Bộ Sang Điện Thoại Di Động</span>
+        </div>
+        <button class="modal-close-btn"><i class="fa-solid fa-xmark"></i></button>
+      </div>
+      <div class="modal-body-custom">
+        <!-- Warning when running via local file:/// protocol -->
+        <div id="file-protocol-warning" style="display: none; background: #fff4ce; border: 1px solid #fed9cc; border-radius: 8px; padding: 10px 14px; margin-bottom: 12px; font-size: 12px; color: #7a4100; line-height: 1.5;">
+          <div style="font-weight: 700; display: flex; align-items: center; gap: 6px; margin-bottom: 4px;">
+            <i class="fa-solid fa-triangle-exclamation" style="color: #d83b01;"></i>
+            Tại sao điện thoại không quét được link file:/// ?
+          </div>
+          <div>
+            Bạn đang mở web trực tiếp từ ổ cứng PC (<code>file:///E:/...</code>). Điện thoại không thể kết nối tới ổ đĩa cứng của máy tính qua link <code>file:///</code>.
+          </div>
+        </div>
+
+        <!-- Connection Mode Toggle -->
+        <div class="pwa-platform-tabs" style="margin-bottom: 12px;">
+          <button class="pwa-tab-btn active" id="qr-tab-wifi" onclick="window.switchQrNetworkMode('wifi')">
+            <i class="fa-solid fa-wifi"></i> Cùng Wi-Fi (Live Server)
+          </button>
+          <button class="pwa-tab-btn" id="qr-tab-online" onclick="window.switchQrNetworkMode('online')">
+            <i class="fa-solid fa-globe"></i> Chạy Online (GitHub)
+          </button>
+        </div>
+
+        <p style="font-size: 12px; color: var(--text-secondary); text-align: center; margin-bottom: 8px;" id="qr-instruction-text">
+          Đảm bảo điện thoại và máy tính kết nối <strong>cùng 1 mạng Wi-Fi</strong>, sau đó quét mã QR:
+        </p>
+        
+        <div class="qr-container">
+          <div id="qr-code-box"></div>
+        </div>
+
+        <!-- Direct URL input & copy -->
+        <div class="modal-form-group" style="margin-top: 10px;">
+          <label class="modal-form-label" id="label-qr-url">Đường dẫn mã QR đang tạo:</label>
+          <div class="qr-link-copy-box">
+            <input type="text" class="modal-input" id="input-sync-share-url">
+            <button class="office-btn primary" id="btn-copy-sync-link" title="Sao chép link">
+              <i class="fa-solid fa-copy"></i>
+            </button>
+          </div>
+          <div class="modal-hint" id="hint-qr-url">
+            IP Wi-Fi máy tính của bạn: <code>http://172.68.1.47:5502</code>
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer-custom">
+        <button class="office-btn primary btn-cancel-modal">Đóng</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal 6: Hướng Dẫn Cài Đặt Thành App Riêng Trên Điện Thoại (PWA) -->
+  <div class="modal-backdrop-custom" id="modal-install-guide">
+    <div class="modal-card-custom" style="max-width: 540px;">
+      <div class="modal-header-custom">
+        <div class="modal-title-custom">
+          <i class="fa-solid fa-mobile-screen-button text-blue"></i>
+          <span>Lưu App Về Màn Hình Chính Điện Thoại</span>
+        </div>
+        <button class="modal-close-btn"><i class="fa-solid fa-xmark"></i></button>
+      </div>
+      <div class="modal-body-custom" style="padding: 16px 20px;">
+        <div class="pwa-platform-tabs">
+          <button class="pwa-tab-btn active" id="tab-btn-ios" onclick="window.switchPwaTab('ios')">
+            <i class="fa-brands fa-apple"></i> iPhone / iPad
+          </button>
+          <button class="pwa-tab-btn" id="tab-btn-android" onclick="window.switchPwaTab('android')">
+            <i class="fa-brands fa-android"></i> Android
+          </button>
+          <button class="pwa-tab-btn" id="tab-btn-github" onclick="window.switchPwaTab('github')">
+            <i class="fa-brands fa-github"></i> Đưa Lên GitHub
+          </button>
+        </div>
+
+        <!-- TAB 1: iOS Safari -->
+        <div class="pwa-tab-content active" id="pwa-content-ios">
+          <div class="pwa-step-card">
+            <div class="step-num">1</div>
+            <div class="step-desc">
+              Mở link web CloudDocs bằng trình duyệt <strong>Safari</strong> trên iPhone/iPad.
+            </div>
+          </div>
+          <div class="pwa-step-card">
+            <div class="step-num">2</div>
+            <div class="step-desc">
+              Chạm vào nút <strong>Chia sẻ</strong> <i class="fa-solid fa-arrow-up-from-bracket text-blue" style="font-size: 14px;"></i> ở thanh công cụ dưới cùng màn hình.
+            </div>
+          </div>
+          <div class="pwa-step-card">
+            <div class="step-num">3</div>
+            <div class="step-desc">
+              Cuộn menu xuống và chạm vào <strong>"Thêm vào MH chính" (Add to Home Screen)</strong> <i class="fa-regular fa-square-plus text-blue"></i>.
+            </div>
+          </div>
+          <div class="pwa-step-card">
+            <div class="step-num">4</div>
+            <div class="step-desc">
+              Nhấn <strong>"Thêm" (Add)</strong> ở góc trên bên phải. Ứng dụng CloudDocs sẽ nằm ngay trên màn hình chính như một app tải từ App Store!
+            </div>
+          </div>
+        </div>
+
+        <!-- TAB 2: Android Chrome -->
+        <div class="pwa-tab-content" id="pwa-content-android" style="display: none;">
+          <div style="text-align: center; margin-bottom: 14px;">
+            <button class="btn-command-new" id="btn-trigger-pwa-install" style="font-size: 14px; padding: 10px 20px; width: 100%; justify-content: center;">
+              <i class="fa-solid fa-download"></i> Cài Đặt Ứng Dụng Ngay
+            </button>
+          </div>
+          <div class="pwa-step-card">
+            <div class="step-num">1</div>
+            <div class="step-desc">
+              Mở link trong trình duyệt <strong>Chrome</strong> trên điện thoại Android.
+            </div>
+          </div>
+          <div class="pwa-step-card">
+            <div class="step-num">2</div>
+            <div class="step-desc">
+              Nhấn vào biểu tượng <strong>menu 3 chấm ⋮</strong> ở góc trên bên phải.
+            </div>
+          </div>
+          <div class="pwa-step-card">
+            <div class="step-num">3</div>
+            <div class="step-desc">
+              Chọn <strong>"Cài đặt ứng dụng"</strong> hoặc <strong>"Thêm vào Màn hình chính"</strong>.
+            </div>
+          </div>
+        </div>
+
+        <!-- TAB 3: Hướng Dẫn GitHub Pages -->
+        <div class="pwa-tab-content" id="pwa-content-github" style="display: none;">
+          <div class="pwa-step-card">
+            <div class="step-num">1</div>
+            <div class="step-desc">
+              Tạo một kho lưu trữ (Repository) mới trên GitHub (chọn <strong>Public</strong>).
+            </div>
+          </div>
+          <div class="pwa-step-card">
+            <div class="step-num">2</div>
+            <div class="step-desc">
+              Tải toàn bộ thư mục này lên repository và commit.
+            </div>
+          </div>
+          <div class="pwa-step-card">
+            <div class="step-num">3</div>
+            <div class="step-desc">
+              Vào mục <strong>Settings > Pages</strong> trên GitHub, ở phần Branch chọn <strong>main</strong> (root) rồi bấm <strong>Save</strong>.
+            </div>
+          </div>
+          <div class="pwa-step-card">
+            <div class="step-num">4</div>
+            <div class="step-desc">
+              Sau 1-2 phút, bạn sẽ có link: <code>https://&lt;tên_github&gt;.github.io/&lt;tên_repo&gt;/</code> để mở trên bất kỳ điện thoại nào!
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer-custom">
+        <button class="office-btn primary btn-cancel-modal">Đã Hiểu</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Toast Notification Container -->
+  <div class="toast-container" id="toast-container"></div>
+
+  <!-- External Libraries: Firebase Compat SDK, Mammoth (DOCX parser), QRCode -->
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-database.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/mammoth/1.6.0/mammoth.browser.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+
+  <!-- Word Application Script & Cloud Sync Engine -->
+  <script src="js/app.js"></script>
+  <script src="js/cloud-sync.js"></script>
+</body>
+</html>

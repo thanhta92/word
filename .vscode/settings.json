@@ -1,0 +1,12 @@
+{
+    "liveServer.settings.port": 5502,
+    "antigravity.agent.toolExecutionPolicy": "always-proceed",
+    "antigravity.agent.autoProceed": true,
+    "antigravity.agent.artifactReviewMode": "always-proceed",
+    "antigravity.terminal.sandbox": "proceed-in-sandbox",
+    "antigravity.agent.permissions.fileAccess": "allow",
+    "antigravity.agent.permissions.terminal": "allow",
+    "gemini.agent.toolExecutionPolicy": "always-proceed",
+    "gemini.agent.autoProceed": true,
+    "chat.agent.alwaysApprove": true
+}

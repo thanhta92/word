@@ -1,0 +1,1433 @@
+/* ==========================================================================
+   MICROSOFT 365 / ONEDRIVE EXPLORER & CLOUD DOCS STYLING
+   Fluent UI Design, Responsive Mobile/Desktop, Glassmorphic Accents, Dark Mode
+   ========================================================================== */
+
+/* Top-level View Switcher */
+.app-view {
+  display: none;
+  width: 100%;
+  height: 100vh;
+  flex-direction: column;
+  overflow: hidden;
+  background-color: var(--bg-app);
+}
+
+.app-view.active {
+  display: flex;
+}
+
+/* ==========================================================================
+   1. EXPLORER TOPBAR / HEADER
+   ========================================================================== */
+.explorer-header {
+  height: 52px;
+  background: linear-gradient(135deg, #185abd 0%, #0c3b82 100%);
+  color: #ffffff;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 16px;
+  flex-shrink: 0;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+  z-index: 100;
+}
+
+.explorer-header-left {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.brand-icon-wrapper {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  cursor: pointer;
+  user-select: none;
+}
+
+.brand-title {
+  display: flex;
+  flex-direction: column;
+}
+
+.brand-name {
+  font-size: 15px;
+  font-weight: 700;
+  letter-spacing: -0.2px;
+  color: #ffffff;
+}
+
+.brand-sub {
+  font-size: 11px;
+  opacity: 0.85;
+  font-weight: 400;
+}
+
+/* Explorer Search */
+.explorer-header-center {
+  flex: 1;
+  max-width: 540px;
+  margin: 0 20px;
+}
+
+.explorer-search-box {
+  display: flex;
+  align-items: center;
+  background: rgba(255, 255, 255, 0.18);
+  backdrop-filter: blur(8px);
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  border-radius: 20px;
+  padding: 6px 14px;
+  gap: 10px;
+  transition: all 0.2s ease;
+}
+
+.explorer-search-box:focus-within {
+  background: #ffffff;
+  border-color: #ffffff;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.2);
+}
+
+.explorer-search-box i {
+  color: rgba(255, 255, 255, 0.8);
+  font-size: 13px;
+  transition: color 0.2s ease;
+}
+
+.explorer-search-box:focus-within i {
+  color: #185abd;
+}
+
+.explorer-search-box input {
+  flex: 1;
+  background: transparent;
+  border: none;
+  outline: none;
+  font-size: 13px;
+  color: #ffffff;
+  font-family: inherit;
+}
+
+.explorer-search-box:focus-within input {
+  color: #242424;
+}
+
+.explorer-search-box input::placeholder {
+  color: rgba(255, 255, 255, 0.75);
+}
+
+.explorer-search-box:focus-within input::placeholder {
+  color: #717171;
+}
+
+.btn-clear-search {
+  background: none;
+  border: none;
+  color: #666;
+  cursor: pointer;
+  display: none;
+}
+
+/* Explorer Header Right Controls */
+.explorer-header-right {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+/* Cloud Sync Indicator Badge */
+.cloud-sync-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  background: rgba(255, 255, 255, 0.16);
+  backdrop-filter: blur(4px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 16px;
+  padding: 5px 12px;
+  font-size: 12px;
+  font-weight: 500;
+  color: #ffffff;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.cloud-sync-badge:hover {
+  background: rgba(255, 255, 255, 0.25);
+}
+
+.cloud-sync-badge.online .sync-dot {
+  background-color: #4ade80;
+  box-shadow: 0 0 8px #4ade80;
+}
+
+.cloud-sync-badge.syncing .sync-dot {
+  background-color: #facc15;
+  box-shadow: 0 0 8px #facc15;
+  animation: pulseSync 1s infinite;
+}
+
+.cloud-sync-badge.offline .sync-dot {
+  background-color: #f87171;
+}
+
+.sync-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  display: inline-block;
+}
+
+@keyframes pulseSync {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50% { opacity: 0.4; transform: scale(0.85); }
+}
+
+/* User Account Profile Pill */
+.user-account-btn {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: rgba(255, 255, 255, 0.14);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  padding: 4px 10px 4px 4px;
+  border-radius: 20px;
+  color: #ffffff;
+  cursor: pointer;
+  font-size: 12px;
+  font-weight: 500;
+  transition: all 0.2s ease;
+}
+
+.user-account-btn:hover {
+  background: rgba(255, 255, 255, 0.25);
+}
+
+.user-account-avatar {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  background: #ffffff;
+  color: #185abd;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+  font-size: 12px;
+}
+
+/* ==========================================================================
+   2. COMMAND BAR (Tạo mới, Tải lên, Bộ lọc, Sắp xếp)
+   ========================================================================== */
+.explorer-command-bar {
+  height: 48px;
+  background-color: #ffffff;
+  border-bottom: 1px solid #e1dfdd;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 16px;
+  flex-shrink: 0;
+}
+
+body.dark-mode .explorer-command-bar {
+  background-color: #292827;
+  border-color: #3b3a39;
+}
+
+.command-bar-left {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+/* Primary "Tạo Mới" Button */
+.btn-command-new {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background-color: #185abd;
+  color: #ffffff;
+  border: none;
+  border-radius: 4px;
+  padding: 7px 14px;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color 0.15s ease, transform 0.1s ease;
+}
+
+.btn-command-new:hover {
+  background-color: #104e9c;
+}
+
+.btn-command-new:active {
+  transform: scale(0.98);
+}
+
+.command-new-dropdown {
+  position: absolute;
+  top: calc(100% + 4px);
+  left: 0;
+  background-color: #ffffff;
+  border: 1px solid #d1d1d1;
+  border-radius: 6px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
+  min-width: 220px;
+  z-index: 1000;
+  display: none;
+  padding: 6px 0;
+}
+
+body.dark-mode .command-new-dropdown {
+  background-color: #2b2b2b;
+  border-color: #484644;
+}
+
+.command-new-dropdown.show {
+  display: block;
+  animation: fadeInDown 0.15s ease-out;
+}
+
+.dropdown-action-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  width: 100%;
+  padding: 9px 14px;
+  background: none;
+  border: none;
+  color: var(--text-main);
+  font-size: 13px;
+  text-align: left;
+  cursor: pointer;
+  transition: background-color 0.15s ease;
+}
+
+.dropdown-action-item:hover {
+  background-color: #f3f2f1;
+}
+
+body.dark-mode .dropdown-action-item:hover {
+  background-color: #3b3a39;
+}
+
+.dropdown-action-item i {
+  font-size: 16px;
+  width: 18px;
+  text-align: center;
+}
+
+.dropdown-action-item i.color-word { color: #185abd; }
+.dropdown-action-item i.color-folder { color: #f59e0b; }
+
+/* Secondary Command Buttons */
+.btn-command {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: none;
+  border: 1px solid transparent;
+  border-radius: 4px;
+  padding: 6px 12px;
+  font-size: 13px;
+  color: var(--text-main);
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.btn-command:hover {
+  background-color: #f3f2f1;
+  border-color: #e1dfdd;
+}
+
+body.dark-mode .btn-command:hover {
+  background-color: #3b3a39;
+  border-color: #484644;
+}
+
+.btn-command i {
+  color: #185abd;
+  font-size: 14px;
+}
+
+body.dark-mode .btn-command i {
+  color: #4f81bd;
+}
+
+.command-bar-divider {
+  width: 1px;
+  height: 20px;
+  background-color: #e1dfdd;
+  margin: 0 4px;
+}
+
+body.dark-mode .command-bar-divider {
+  background-color: #484644;
+}
+
+/* Command Bar Right Controls (Views, Sort) */
+.command-bar-right {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.view-toggle-group {
+  display: flex;
+  background-color: #f3f2f1;
+  border-radius: 4px;
+  padding: 2px;
+}
+
+body.dark-mode .view-toggle-group {
+  background-color: #3b3a39;
+}
+
+.btn-view-toggle {
+  background: none;
+  border: none;
+  padding: 5px 8px;
+  border-radius: 3px;
+  color: var(--text-secondary);
+  cursor: pointer;
+  font-size: 13px;
+  transition: all 0.15s ease;
+}
+
+.btn-view-toggle.active {
+  background-color: #ffffff;
+  color: #185abd;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+body.dark-mode .btn-view-toggle.active {
+  background-color: #242424;
+  color: #4f81bd;
+}
+
+/* ==========================================================================
+   3. BREADCRUMB & LOCATION BAR
+   ========================================================================== */
+.explorer-location-bar {
+  padding: 10px 18px;
+  background-color: var(--bg-app);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+  flex-shrink: 0;
+}
+
+.breadcrumb-list {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 6px;
+  font-size: 13px;
+}
+
+.breadcrumb-item {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  color: var(--text-secondary);
+  cursor: pointer;
+  padding: 3px 6px;
+  border-radius: 4px;
+  transition: all 0.15s ease;
+  font-weight: 500;
+}
+
+.breadcrumb-item:hover {
+  background-color: rgba(0, 0, 0, 0.05);
+  color: #185abd;
+}
+
+body.dark-mode .breadcrumb-item:hover {
+  background-color: rgba(255, 255, 255, 0.08);
+}
+
+.breadcrumb-item.active {
+  color: var(--text-main);
+  font-weight: 600;
+  cursor: default;
+}
+
+.breadcrumb-separator {
+  color: #a19f9d;
+  font-size: 11px;
+}
+
+.location-metrics {
+  font-size: 12px;
+  color: var(--text-secondary);
+}
+
+/* ==========================================================================
+   4. EXPLORER CONTENT CONTAINER (Folders + Files)
+   ========================================================================== */
+.explorer-content-scroll {
+  flex: 1;
+  overflow-y: auto;
+  padding: 16px 20px 60px 20px;
+}
+
+.explorer-section {
+  margin-bottom: 28px;
+}
+
+.section-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 12px;
+  padding-bottom: 6px;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.06);
+}
+
+body.dark-mode .section-header {
+  border-color: rgba(255, 255, 255, 0.08);
+}
+
+.section-title {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--text-main);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.section-count {
+  font-size: 12px;
+  color: var(--text-secondary);
+  font-weight: 400;
+}
+
+/* ==========================================================================
+   5. FOLDER GRID & ITEMS
+   ========================================================================== */
+.folders-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(210px, 1fr));
+  gap: 12px;
+}
+
+.folder-card {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background-color: #ffffff;
+  border: 1px solid #edebe9;
+  border-radius: 8px;
+  padding: 10px 14px;
+  cursor: pointer;
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
+  position: relative;
+}
+
+body.dark-mode .folder-card {
+  background-color: #2b2b2b;
+  border-color: #3b3a39;
+}
+
+.folder-card:hover {
+  transform: translateY(-2px);
+  border-color: #185abd;
+  box-shadow: 0 4px 12px rgba(24, 90, 189, 0.12);
+}
+
+.folder-card-main {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex: 1;
+  overflow: hidden;
+}
+
+.folder-icon {
+  font-size: 24px;
+  color: #f59e0b;
+  flex-shrink: 0;
+  transition: transform 0.2s ease;
+}
+
+.folder-card:hover .folder-icon {
+  transform: scale(1.1);
+}
+
+.folder-info {
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.folder-name {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--text-main);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.folder-meta {
+  font-size: 11px;
+  color: var(--text-secondary);
+  margin-top: 2px;
+}
+
+.folder-card-action {
+  background: none;
+  border: none;
+  color: var(--text-secondary);
+  padding: 6px;
+  border-radius: 4px;
+  cursor: pointer;
+  opacity: 0.6;
+  transition: opacity 0.15s ease, background-color 0.15s ease;
+}
+
+.folder-card:hover .folder-card-action {
+  opacity: 1;
+}
+
+.folder-card-action:hover {
+  background-color: #f3f2f1;
+  color: var(--text-main);
+}
+
+/* ==========================================================================
+   6. DOCUMENT GRID & CARDS (.docx)
+   ========================================================================== */
+.files-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  gap: 16px;
+}
+
+.doc-card {
+  background-color: #ffffff;
+  border: 1px solid #edebe9;
+  border-radius: 10px;
+  overflow: hidden;
+  cursor: pointer;
+  transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
+  display: flex;
+  flex-direction: column;
+  position: relative;
+}
+
+body.dark-mode .doc-card {
+  background-color: #2b2b2b;
+  border-color: #3b3a39;
+}
+
+.doc-card:hover {
+  transform: translateY(-4px);
+  border-color: #185abd;
+  box-shadow: 0 8px 20px rgba(24, 90, 189, 0.16);
+}
+
+/* Document Card Header */
+.doc-card-header {
+  padding: 12px 14px 8px 14px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.doc-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.doc-word-icon {
+  width: 26px;
+  height: 26px;
+  background-color: #185abd;
+  color: #ffffff;
+  border-radius: 4px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 14px;
+  font-weight: 700;
+  box-shadow: 0 2px 4px rgba(24, 90, 189, 0.3);
+}
+
+.doc-format-tag {
+  font-size: 11px;
+  font-weight: 700;
+  color: #185abd;
+  background: #e8f0fe;
+  padding: 2px 6px;
+  border-radius: 3px;
+  text-transform: uppercase;
+  letter-spacing: 0.3px;
+}
+
+body.dark-mode .doc-format-tag {
+  background: #103f82;
+  color: #8db3e2;
+}
+
+.doc-card-menu-btn {
+  background: none;
+  border: none;
+  color: var(--text-secondary);
+  width: 28px;
+  height: 28px;
+  border-radius: 4px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.15s ease;
+}
+
+.doc-card-menu-btn:hover {
+  background-color: #f3f2f1;
+  color: var(--text-main);
+}
+
+body.dark-mode .doc-card-menu-btn:hover {
+  background-color: #3b3a39;
+}
+
+/* Document Card Preview Snippet */
+.doc-card-preview {
+  margin: 0 14px;
+  padding: 10px 12px;
+  background-color: #f9fafb;
+  border: 1px solid #f0f0f0;
+  border-radius: 6px;
+  min-height: 72px;
+  max-height: 84px;
+  font-size: 11.5px;
+  line-height: 1.5;
+  color: #555555;
+  overflow: hidden;
+  position: relative;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+body.dark-mode .doc-card-preview {
+  background-color: #202020;
+  border-color: #333333;
+  color: #a0a0a0;
+}
+
+.doc-card-preview::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 24px;
+  background: linear-gradient(to bottom, transparent, #f9fafb);
+}
+
+body.dark-mode .doc-card-preview::after {
+  background: linear-gradient(to bottom, transparent, #202020);
+}
+
+/* Document Card Body & Title */
+.doc-card-body {
+  padding: 12px 14px;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.doc-card-title {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--text-main);
+  line-height: 1.35;
+  margin-bottom: 6px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+}
+
+.doc-card-meta {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-size: 11px;
+  color: var(--text-secondary);
+  margin-top: 8px;
+}
+
+.doc-meta-item {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+}
+
+/* ==========================================================================
+   7. LIST VIEW (Dạng Danh Sách Chi Tiết)
+   ========================================================================== */
+.files-list-table {
+  width: 100%;
+  background-color: #ffffff;
+  border: 1px solid #edebe9;
+  border-radius: 8px;
+  border-collapse: collapse;
+  overflow: hidden;
+}
+
+body.dark-mode .files-list-table {
+  background-color: #2b2b2b;
+  border-color: #3b3a39;
+}
+
+.files-list-table th {
+  background-color: #f8f8f8;
+  padding: 10px 14px;
+  text-align: left;
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--text-secondary);
+  border-bottom: 1px solid #edebe9;
+}
+
+body.dark-mode .files-list-table th {
+  background-color: #201f1e;
+  border-color: #3b3a39;
+}
+
+.files-list-table td {
+  padding: 11px 14px;
+  font-size: 13px;
+  color: var(--text-main);
+  border-bottom: 1px solid #f3f2f1;
+}
+
+body.dark-mode .files-list-table td {
+  border-color: #333333;
+}
+
+.files-list-table tr:last-child td {
+  border-bottom: none;
+}
+
+.files-list-table tr {
+  cursor: pointer;
+  transition: background-color 0.15s ease;
+}
+
+.files-list-table tr:hover {
+  background-color: #f0f4f9;
+}
+
+body.dark-mode .files-list-table tr:hover {
+  background-color: #353433;
+}
+
+.list-name-cell {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-weight: 500;
+}
+
+/* ==========================================================================
+   8. EMPTY STATE & SEARCH NO RESULTS
+   ========================================================================== */
+.empty-state {
+  text-align: center;
+  padding: 48px 20px;
+  background-color: #ffffff;
+  border: 2px dashed #edebe9;
+  border-radius: 12px;
+  margin: 16px 0;
+}
+
+body.dark-mode .empty-state {
+  background-color: #242424;
+  border-color: #3b3a39;
+}
+
+.empty-state-icon {
+  width: 68px;
+  height: 68px;
+  border-radius: 50%;
+  background: #f0f4f9;
+  color: #185abd;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 28px;
+  margin-bottom: 14px;
+}
+
+body.dark-mode .empty-state-icon {
+  background: #1a2f4d;
+  color: #8db3e2;
+}
+
+.empty-state-title {
+  font-size: 16px;
+  font-weight: 600;
+  color: var(--text-main);
+  margin-bottom: 6px;
+}
+
+.empty-state-desc {
+  font-size: 13px;
+  color: var(--text-secondary);
+  max-width: 360px;
+  margin: 0 auto 16px auto;
+  line-height: 1.45;
+}
+
+/* ==========================================================================
+   9. POPUPS & CONTEXT MENUS
+   ========================================================================== */
+.explorer-context-menu {
+  position: fixed;
+  background-color: #ffffff;
+  border: 1px solid #d1d1d1;
+  border-radius: 8px;
+  box-shadow: 0 10px 28px rgba(0, 0, 0, 0.18);
+  min-width: 190px;
+  z-index: 10000;
+  display: none;
+  padding: 6px 0;
+  animation: fadeInDown 0.12s ease-out;
+}
+
+body.dark-mode .explorer-context-menu {
+  background-color: #2b2b2b;
+  border-color: #484644;
+}
+
+.context-menu-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  width: 100%;
+  padding: 8px 14px;
+  background: none;
+  border: none;
+  color: var(--text-main);
+  font-size: 13px;
+  cursor: pointer;
+  text-align: left;
+  transition: background-color 0.15s ease;
+}
+
+.context-menu-item:hover {
+  background-color: #f3f2f1;
+}
+
+body.dark-mode .context-menu-item:hover {
+  background-color: #3b3a39;
+}
+
+.context-menu-item.danger {
+  color: #d13438;
+}
+
+.context-menu-item.danger:hover {
+  background-color: #fdf3f4;
+}
+
+body.dark-mode .context-menu-item.danger:hover {
+  background-color: #442223;
+}
+
+.context-menu-divider {
+  height: 1px;
+  background-color: #edebe9;
+  margin: 4px 0;
+}
+
+body.dark-mode .context-menu-divider {
+  background-color: #3b3a39;
+}
+
+/* ==========================================================================
+   10. MODALS (Login / Auth, QR Code, Tạo Thư mục, Đổi tên)
+   ========================================================================== */
+.modal-backdrop-custom {
+  position: fixed;
+  inset: 0;
+  background-color: rgba(0, 0, 0, 0.55);
+  backdrop-filter: blur(4px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 20000;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.2s ease;
+}
+
+.modal-backdrop-custom.show {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.modal-card-custom {
+  background-color: #ffffff;
+  border-radius: 12px;
+  width: 90%;
+  max-width: 480px;
+  box-shadow: 0 16px 40px rgba(0, 0, 0, 0.25);
+  overflow: hidden;
+  transform: scale(0.95);
+  transition: transform 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+body.dark-mode .modal-card-custom {
+  background-color: #2b2b2b;
+  color: #ffffff;
+}
+
+.modal-backdrop-custom.show .modal-card-custom {
+  transform: scale(1);
+}
+
+.modal-header-custom {
+  padding: 16px 20px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-bottom: 1px solid #edebe9;
+}
+
+body.dark-mode .modal-header-custom {
+  border-color: #3b3a39;
+}
+
+.modal-title-custom {
+  font-size: 16px;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.modal-close-btn {
+  background: none;
+  border: none;
+  color: var(--text-secondary);
+  font-size: 16px;
+  cursor: pointer;
+  padding: 4px 8px;
+  border-radius: 4px;
+}
+
+.modal-close-btn:hover {
+  background-color: #f3f2f1;
+  color: var(--text-main);
+}
+
+.modal-body-custom {
+  padding: 20px;
+}
+
+.modal-footer-custom {
+  padding: 14px 20px;
+  background-color: #f9f9f9;
+  border-top: 1px solid #edebe9;
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+}
+
+body.dark-mode .modal-footer-custom {
+  background-color: #201f1e;
+  border-color: #3b3a39;
+}
+
+/* Modal Form Controls */
+.modal-form-group {
+  margin-bottom: 16px;
+}
+
+.modal-form-label {
+  display: block;
+  font-size: 13px;
+  font-weight: 600;
+  margin-bottom: 6px;
+  color: var(--text-main);
+}
+
+.modal-input {
+  width: 100%;
+  padding: 9px 12px;
+  font-size: 13px;
+  border: 1px solid #d1d1d1;
+  border-radius: 6px;
+  outline: none;
+  background-color: #ffffff;
+  color: var(--text-main);
+  font-family: inherit;
+  transition: border-color 0.15s ease;
+}
+
+body.dark-mode .modal-input {
+  background-color: #1e1e1e;
+  border-color: #484644;
+  color: #ffffff;
+}
+
+.modal-input:focus {
+  border-color: #185abd;
+  box-shadow: 0 0 0 2px rgba(24, 90, 189, 0.2);
+}
+
+.modal-hint {
+  font-size: 11.5px;
+  color: var(--text-secondary);
+  margin-top: 5px;
+  line-height: 1.4;
+}
+
+/* Color picker pills for folders */
+.folder-color-options {
+  display: flex;
+  gap: 10px;
+  margin-top: 8px;
+}
+
+.color-option-btn {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  border: 2px solid transparent;
+  cursor: pointer;
+  transition: transform 0.15s ease;
+}
+
+.color-option-btn:hover {
+  transform: scale(1.15);
+}
+
+.color-option-btn.selected {
+  border-color: #185abd;
+  box-shadow: 0 0 0 2px #ffffff inset;
+}
+
+/* QR Code Display in Modal */
+.qr-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 16px;
+  background-color: #ffffff;
+  border-radius: 8px;
+  border: 1px solid #e1dfdd;
+  margin: 12px 0;
+}
+
+#qr-code-box {
+  padding: 10px;
+  background: white;
+  border-radius: 6px;
+}
+
+.qr-link-copy-box {
+  display: flex;
+  gap: 8px;
+  margin-top: 14px;
+  width: 100%;
+}
+
+/* ==========================================================================
+   11. BACK NAVIGATION IN EDITOR
+   ========================================================================== */
+.btn-back-nav {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: rgba(255, 255, 255, 0.18);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  color: #ffffff;
+  padding: 5px 12px;
+  border-radius: 16px;
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.btn-back-nav:hover {
+  background: rgba(255, 255, 255, 0.3);
+  transform: translateX(-2px);
+}
+
+/* Floating Action Button (Mobile Only) */
+.fab-new-btn {
+  display: none;
+  position: fixed;
+  bottom: 24px;
+  right: 20px;
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #185abd 0%, #0c3b82 100%);
+  color: #ffffff;
+  border: none;
+  box-shadow: 0 6px 20px rgba(24, 90, 189, 0.4);
+  font-size: 22px;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  z-index: 1000;
+  transition: transform 0.2s ease;
+}
+
+.fab-new-btn:active {
+  transform: scale(0.92);
+}
+
+/* ==========================================================================
+   12. RESPONSIVE DESIGN (Điện thoại & Tablet)
+   ========================================================================== */
+@media (max-width: 768px) {
+  .explorer-header {
+    height: auto;
+    padding: 8px 12px;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+
+  .explorer-header-left {
+    flex: 1;
+  }
+
+  .explorer-header-center {
+    order: 3;
+    width: 100%;
+    max-width: 100%;
+    margin: 4px 0 0 0;
+  }
+
+  .cloud-sync-badge span {
+    display: none;
+  }
+
+  .cloud-sync-badge {
+    padding: 6px 8px;
+  }
+
+  .user-account-btn span {
+    display: none;
+  }
+
+  .explorer-command-bar {
+    padding: 0 10px;
+    overflow-x: auto;
+  }
+
+  .btn-command span {
+    display: none;
+  }
+
+  .btn-command {
+    padding: 6px 8px;
+  }
+
+  .folders-grid {
+    grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+    gap: 8px;
+  }
+
+  .files-grid {
+    grid-template-columns: 1fr;
+    gap: 12px;
+  }
+
+  .fab-new-btn {
+    display: flex;
+  }
+
+  /* Word Editor on Mobile */
+  .office-titlebar {
+    height: auto;
+    padding: 6px 10px;
+    flex-wrap: wrap;
+    gap: 6px;
+  }
+
+  .titlebar-center {
+    display: none;
+  }
+
+  .quick-toolbar {
+    display: none;
+  }
+
+  .doc-title-container input {
+    max-width: 150px;
+    font-size: 13px;
+  }
+
+  .ribbon-tabs-bar {
+    overflow-x: auto;
+    white-space: nowrap;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .ribbon-panel {
+    overflow-x: auto;
+  }
+
+  .ribbon-content {
+    min-width: 720px;
+  }
+
+  .canvas-scroll-container {
+    padding: 10px 4px;
+  }
+
+  .word-page {
+    width: 100% !important;
+    min-height: auto !important;
+    padding: 24px 18px !important;
+    box-shadow: none !important;
+    border-radius: 4px;
+  }
+
+  .horizontal-ruler-wrapper {
+    display: none;
+  }
+
+  .vertical-ruler-container {
+    display: none;
+  }
+
+  .office-statusbar {
+    flex-direction: column;
+    height: auto;
+    padding: 6px 10px;
+    gap: 4px;
+  }
+
+  .status-right {
+    width: 100%;
+    justify-content: space-between;
+  }
+}
+
+/* ==========================================================================
+   13. PWA INSTALL MODAL & PLATFORM TABS
+   ========================================================================== */
+.pwa-platform-tabs {
+  display: flex;
+  background-color: #f3f2f1;
+  border-radius: 8px;
+  padding: 4px;
+  gap: 4px;
+  margin-bottom: 16px;
+}
+
+body.dark-mode .pwa-platform-tabs {
+  background-color: #201f1e;
+}
+
+.pwa-tab-btn {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 7px;
+  background: none;
+  border: none;
+  padding: 8px 10px;
+  border-radius: 6px;
+  font-size: 12.5px;
+  font-weight: 600;
+  color: var(--text-secondary);
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.pwa-tab-btn.active {
+  background-color: #ffffff;
+  color: #185abd;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
+}
+
+body.dark-mode .pwa-tab-btn.active {
+  background-color: #2b2b2b;
+  color: #8db3e2;
+}
+
+.pwa-step-card {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  background-color: #f9f9f9;
+  border: 1px solid #edebe9;
+  border-radius: 8px;
+  padding: 10px 14px;
+  margin-bottom: 10px;
+  transition: transform 0.15s ease;
+}
+
+body.dark-mode .pwa-step-card {
+  background-color: #222222;
+  border-color: #3b3a39;
+}
+
+.pwa-step-card:hover {
+  transform: translateX(3px);
+}
+
+.step-num {
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #185abd 0%, #103f82 100%);
+  color: #ffffff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 12px;
+  font-weight: 700;
+  flex-shrink: 0;
+  margin-top: 1px;
+}
+
+.step-desc {
+  font-size: 13px;
+  line-height: 1.5;
+  color: var(--text-main);
+  flex: 1;
+}
+
+.step-desc strong {
+  color: #185abd;
+}
+
+body.dark-mode .step-desc strong {
+  color: #8db3e2;
+}
+
+.pwa-btn-highlight {
+  background: rgba(255, 255, 255, 0.25) !important;
+  border: 1px solid rgba(255, 255, 255, 0.4) !important;
+  animation: pwaPillGlow 2.5s infinite;
+}
+
+@keyframes pwaPillGlow {
+  0%, 100% { box-shadow: 0 0 0 rgba(255, 255, 255, 0); }
+  50% { box-shadow: 0 0 10px rgba(255, 255, 255, 0.45); }
+}
