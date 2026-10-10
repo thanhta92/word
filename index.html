@@ -200,10 +200,29 @@
       </div>
     </div>
 
-    <!-- Mobile Floating Action Button (FAB) -->
-    <button class="fab-new-btn" id="fab-new-btn" title="Tạo tài liệu mới">
-      <i class="fa-solid fa-plus"></i>
-    </button>
+    <!-- Mobile Bottom Navigation Bar (iOS / Android Native Style) -->
+    <nav class="mobile-bottom-nav" id="mobile-bottom-nav">
+      <button class="mobile-nav-item active" id="mob-nav-home">
+        <i class="fa-solid fa-house"></i>
+        <span>Tất cả tệp</span>
+      </button>
+      <button class="mobile-nav-item" id="mob-nav-folders">
+        <i class="fa-solid fa-folder"></i>
+        <span>Thư mục</span>
+      </button>
+      <button class="mobile-nav-item center-fab" id="mob-nav-new" title="Tạo mới tài liệu">
+        <div class="center-fab-icon"><i class="fa-solid fa-plus"></i></div>
+        <span>Tạo mới</span>
+      </button>
+      <button class="mobile-nav-item" id="mob-nav-qr">
+        <i class="fa-solid fa-qrcode"></i>
+        <span>Mã QR</span>
+      </button>
+      <button class="mobile-nav-item" id="mob-nav-account">
+        <i class="fa-solid fa-gear"></i>
+        <span>Cài đặt</span>
+      </button>
+    </nav>
   </div>
 
   <!-- ================= 2. WORD EDITOR VIEW ================= -->
@@ -254,21 +273,77 @@
 
       <!-- Right Controls: Profile & Window Controls -->
       <div class="titlebar-right">
-        <!-- Direct Export DOCX button -->
-        <button id="btn-export-docx-direct" class="action-pill-btn" onclick="window.cloudDocs.downloadDocx(window.cloudDocs.activeDocId)" title="Tải xuống tệp Word (.docx)">
-          <i class="fa-solid fa-file-word"></i> <span>Tải .docx</span>
-        </button>
-        <button id="btn-toggle-dark" class="action-pill-btn" title="Chuyển chế độ Sáng / Tối">
-          <i class="fa-solid fa-moon"></i> <span>Chế độ</span>
-        </button>
-        <button id="btn-share-doc" class="action-pill-btn primary" onclick="window.cloudDocs.showQrSyncModal()" title="Chia sẻ & Đồng bộ Đa thiết bị">
-          <i class="fa-solid fa-mobile-screen"></i> <span>Mở trên ĐT</span>
-        </button>
-        <div class="user-avatar" title="Tài khoản Người Dùng" onclick="window.cloudDocs.showAccountModal()">
-          <span id="editor-user-avatar">T</span>
+        <!-- Desktop Action Buttons -->
+        <div class="desktop-title-actions">
+          <button id="btn-export-docx-direct" class="action-pill-btn" onclick="window.cloudDocs.downloadDocx(window.cloudDocs.activeDocId)" title="Tải xuống tệp Word (.docx)">
+            <i class="fa-solid fa-file-word"></i> <span>Tải .docx</span>
+          </button>
+          <button id="btn-toggle-dark" class="action-pill-btn" title="Chuyển chế độ Sáng / Tối">
+            <i class="fa-solid fa-moon"></i> <span>Chế độ</span>
+          </button>
+          <button id="btn-share-doc" class="action-pill-btn primary" onclick="window.cloudDocs.showQrSyncModal()" title="Chia sẻ & Đồng bộ Đa thiết bị">
+            <i class="fa-solid fa-mobile-screen"></i> <span>Mở trên ĐT</span>
+          </button>
+          <div class="user-avatar" title="Tài khoản Người Dùng" onclick="window.cloudDocs.showAccountModal()">
+            <span id="editor-user-avatar">T</span>
+          </div>
+        </div>
+
+        <!-- Mobile Titlebar Actions (Optimized for iPhone / Mobile) -->
+        <div class="mobile-title-actions">
+          <button id="btn-mob-undo" class="mob-title-btn" title="Hoàn tác (Undo)"><i class="fa-solid fa-arrow-rotate-left"></i></button>
+          <button id="btn-mob-redo" class="mob-title-btn" title="Làm lại (Redo)"><i class="fa-solid fa-arrow-rotate-right"></i></button>
+          <button id="btn-mob-download" class="mob-title-btn" onclick="window.cloudDocs.downloadDocx(window.cloudDocs.activeDocId)" title="Tải file .docx"><i class="fa-solid fa-file-word"></i></button>
+          <button id="btn-mob-more" class="mob-title-btn" title="Tùy chọn khác"><i class="fa-solid fa-ellipsis-vertical"></i></button>
+
+          <!-- Mobile Overflow Menu -->
+          <div class="mobile-overflow-menu" id="mobile-overflow-menu">
+            <button class="overflow-menu-item" id="mob-menu-dark"><i class="fa-solid fa-moon"></i> <span>Chế độ Sáng / Tối</span></button>
+            <button class="overflow-menu-item" onclick="window.cloudDocs.showQrSyncModal()"><i class="fa-solid fa-qrcode"></i> <span>Mã QR ĐT</span></button>
+            <button class="overflow-menu-item" onclick="document.getElementById('find-replace-dialog').style.display='flex'"><i class="fa-solid fa-magnifying-glass"></i> <span>Tìm & Thay thế</span></button>
+            <button class="overflow-menu-item" onclick="window.cloudDocs.showAccountModal()"><i class="fa-solid fa-user-gear"></i> <span>Tài khoản & Đồng bộ</span></button>
+          </div>
         </div>
       </div>
     </header>
+
+    <!-- ================= MOBILE FORMATTING TOOLBAR (iOS & Android Style) ================= -->
+    <div class="mobile-formatting-toolbar" id="mobile-formatting-toolbar">
+      <div class="mob-tool-scroll">
+        <button class="mob-tool-btn" id="mob-btn-bold" title="In đậm"><i class="fa-solid fa-bold"></i></button>
+        <button class="mob-tool-btn" id="mob-btn-italic" title="In nghiêng"><i class="fa-solid fa-italic"></i></button>
+        <button class="mob-tool-btn" id="mob-btn-underline" title="Gạch chân"><i class="fa-solid fa-underline"></i></button>
+        <button class="mob-tool-btn" id="mob-btn-strike" title="Gạch ngang"><i class="fa-solid fa-strikethrough"></i></button>
+        
+        <div class="mob-tool-sep"></div>
+        
+        <button class="mob-tool-btn" id="mob-btn-color" title="Màu chữ"><i class="fa-solid fa-font" style="color: #d13438;"></i></button>
+        <button class="mob-tool-btn" id="mob-btn-highlight" title="Tô sáng"><i class="fa-solid fa-highlighter" style="color: #f59e0b;"></i></button>
+        
+        <div class="mob-tool-sep"></div>
+        
+        <button class="mob-tool-btn" id="mob-btn-align-left" title="Căn trái"><i class="fa-solid fa-align-left"></i></button>
+        <button class="mob-tool-btn" id="mob-btn-align-center" title="Căn giữa"><i class="fa-solid fa-align-center"></i></button>
+        <button class="mob-tool-btn" id="mob-btn-align-right" title="Căn phải"><i class="fa-solid fa-align-right"></i></button>
+        
+        <div class="mob-tool-sep"></div>
+
+        <button class="mob-tool-btn" id="mob-btn-bullet" title="Gạch đầu dòng"><i class="fa-solid fa-list-ul"></i></button>
+        <button class="mob-tool-btn" id="mob-btn-number" title="Đánh số"><i class="fa-solid fa-list-ol"></i></button>
+        
+        <div class="mob-tool-sep"></div>
+        
+        <button class="mob-tool-btn" id="mob-btn-img" onclick="document.getElementById('image-dialog').style.display='flex'" title="Chèn ảnh"><i class="fa-regular fa-image"></i></button>
+        <button class="mob-tool-btn" id="mob-btn-tbl" onclick="document.getElementById('table-dialog').style.display='flex'" title="Chèn bảng"><i class="fa-solid fa-table"></i></button>
+
+        <div class="mob-tool-sep"></div>
+
+        <!-- Typography Sheet Button -->
+        <button class="mob-tool-btn mob-sheet-trigger" id="mob-btn-sheet-trigger" title="Định dạng font & cỡ chữ">
+          <span style="font-weight: 700; font-size: 13px;">Aa</span> <i class="fa-solid fa-chevron-up" style="font-size: 8px; margin-left: 2px;"></i>
+        </button>
+      </div>
+    </div>
 
   <!-- ================= RIBBON TABS BAR ================= -->
   <nav class="ribbon-tabs-bar">
@@ -1101,6 +1176,67 @@
       </div>
     </div>
   </footer>
+
+  <!-- ================= MOBILE FONT & STYLES BOTTOM SHEET ================= -->
+  <div class="mobile-sheet-backdrop" id="mobile-sheet-backdrop">
+    <div class="mobile-sheet-card" id="mobile-sheet-card">
+      <div class="sheet-drag-handle"></div>
+      <div class="sheet-top-header">
+        <span class="sheet-heading-title">Định Dạng Văn Bản</span>
+        <button class="sheet-close-x" id="btn-close-sheet"><i class="fa-solid fa-xmark"></i></button>
+      </div>
+      <div class="sheet-content-scroll">
+        <!-- Font Selection -->
+        <div class="sheet-control-group">
+          <label class="sheet-field-label">Phông chữ:</label>
+          <select class="sheet-field-select" id="mob-font-family-select">
+            <option value="Aptos, sans-serif" selected>Aptos (Mặc định)</option>
+            <option value="Calibri, sans-serif">Calibri</option>
+            <option value="Segoe UI, sans-serif">Segoe UI</option>
+            <option value="Times New Roman, serif">Times New Roman</option>
+            <option value="Inter, sans-serif">Inter</option>
+            <option value="Arial, sans-serif">Arial</option>
+            <option value="Roboto, sans-serif">Roboto</option>
+          </select>
+        </div>
+
+        <!-- Paragraph Heading Styles -->
+        <div class="sheet-control-group">
+          <label class="sheet-field-label">Kiểu đoạn:</label>
+          <div class="sheet-heading-pills">
+            <button class="sheet-heading-pill active" data-format="p">Văn bản thường</button>
+            <button class="sheet-heading-pill" data-format="h1">Tiêu đề 1</button>
+            <button class="sheet-heading-pill" data-format="h2">Tiêu đề 2</button>
+            <button class="sheet-heading-pill" data-format="h3">Tiêu đề 3</button>
+          </div>
+        </div>
+
+        <!-- Font Size Stepper -->
+        <div class="sheet-control-group">
+          <label class="sheet-field-label">Cỡ chữ:</label>
+          <div class="sheet-size-row">
+            <button class="sheet-stepper-btn" id="mob-size-minus"><i class="fa-solid fa-minus"></i></button>
+            <span class="sheet-stepper-val" id="mob-size-display">14pt</span>
+            <button class="sheet-stepper-btn" id="mob-size-plus"><i class="fa-solid fa-plus"></i></button>
+          </div>
+        </div>
+
+        <!-- Quick Font Colors -->
+        <div class="sheet-control-group">
+          <label class="sheet-field-label">Màu chữ nhanh:</label>
+          <div class="sheet-color-palette">
+            <button class="sheet-color-swatch" data-color="#000000" style="background: #000000;" title="Đen"></button>
+            <button class="sheet-color-swatch" data-color="#185abd" style="background: #185abd;" title="Xanh Word"></button>
+            <button class="sheet-color-swatch" data-color="#107c41" style="background: #107c41;" title="Xanh lá"></button>
+            <button class="sheet-color-swatch" data-color="#d13438" style="background: #d13438;" title="Đỏ"></button>
+            <button class="sheet-color-swatch" data-color="#5c2d91" style="background: #5c2d91;" title="Tím"></button>
+            <button class="sheet-color-swatch" data-color="#f59e0b" style="background: #f59e0b;" title="Cam"></button>
+            <button class="sheet-color-swatch" data-color="#605e5c" style="background: #605e5c;" title="Xám"></button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
   </div><!-- End of #view-editor -->
 
   <!-- ================= DIALOGS & MODALS ================= -->
